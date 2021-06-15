@@ -37,6 +37,11 @@ RUN php -r "unlink('composer-setup.php');"
 ENV TZ Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+ADD .ssh/jwtRS256.key /var/ssh/jwtRS256
+ADD .ssh/jwtRS256.key.pub /var/ssh/jwtRS256.pub
+RUN chmod 660 /var/ssh/*
+RUN chgrp www-data /var/ssh/*
+
 WORKDIR /var/www
 
 RUN usermod -u 1000 www-data
