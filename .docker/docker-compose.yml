@@ -1,0 +1,45 @@
+version: '3.0'
+services:
+    database:
+        image: mysql:5.7
+        volumes:
+            - ./dockerfiles/database/data:/var/lib/mysql
+            - ./dockerfiles/database/import:/import
+        environment:
+            - "MYSQL_ROOT_PASSWORD=${BDD_MYSQL_ROOT_PASSWORD}"
+            - "MYSQL_USER=${BDD_MYSQL_USER}"
+            - "MYSQL_PASSWORD=${BDD_MYSQL_PASSWORD}"
+            - "MYSQL_DATABASE=${BDD_MYSQL_DATABASE}"
+
+    php:
+        build: ./dockerfiles/php
+        ports:
+            - ${PORT_PHP}:9000
+        volumes:
+            - ${SOURCE_ROOT_FOLDER}:/var/www
+        links:
+            - database
+            - smtp
+
+    httpd:
+        build: ./dockerfiles/httpd
+        volumes:
+            - ${SOURCE_ROOT_FOLDER}:/var/www
+        links:
+            - php
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - database
+        environment:
+            - PMA_HOST=database
+
+    node:
+        build: ./dockerfiles/node
+        volumes:
+            - ${SOURCE_ROOT_FOLDER}:/app
+
+    smtp :
+        image : djfarrelly/maildev:0.13.4
+        restart : always

@@ -1,0 +1,24 @@
+###> IDE ###
+/.idea/
+/nbproject/
+###< IDE ###
+
+###> Docker ###
+/.docker/.env
+/.docker/dockerfiles/database/data/
+!/.docker/dockerfiles/database/data/.gitkeep
+/.docker/dockerfiles/database/import/
+!/.docker/dockerfiles/database/import/.gitkeep
+/.bash_history
+###< Docker ###
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+/.composer/
+###< symfony/framework-bundle ###

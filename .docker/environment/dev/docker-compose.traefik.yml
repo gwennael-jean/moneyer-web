@@ -1,0 +1,48 @@
+version: '3.0'
+services:
+    database:
+        labels:
+            - traefik.enable=false
+
+    php:
+        depends_on:
+            - database
+            - smtp
+        labels:
+            - traefik.enable=false
+
+    httpd:
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.moneyer_httpd.rule=Host(`moneyer.local`)
+            - traefik.http.routers.moneyer_httpd.entryPoints=web
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        depends_on:
+            - database
+        environment:
+            - PMA_HOST=database
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.moneyer_phpmyadmin.rule=Host(`phpmyadmin.moneyer.local`)
+            - traefik.http.routers.moneyer_phpmyadmin.entryPoints=web
+
+    smtp:
+        image: djfarrelly/maildev:0.13.4
+        restart: always
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.moneyer_maildev.rule=Host(`maildev.moneyer.local`)
+            - traefik.http.routers.moneyer_maildev.entryPoints=web
+            - traefik.http.services.moneyer_maildev.loadbalancer.server.port=80
+
+    traefik:
+        image: traefik:v2.3
+        ports:
+            - 80:80
+            - 8080:8080
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./dockerfiles/traefik/traefik.toml:/etc/traefik/traefik.toml
+            - ./dockerfiles/traefik/acme.json:/acme.json
