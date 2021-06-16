@@ -22,12 +22,11 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
-         yield MenuItem::linkToCrud('User list', 'fas fa-users', User::class);
+
+        yield MenuItem::linkToCrud('User list', 'fa fa-users', User::class);
     }
 
-    /**
-     * @Route("/admin", name="admin")
-     */
+    #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
         return $this->render('admin/dashboard.html.twig');
