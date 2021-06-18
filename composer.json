@@ -12,6 +12,7 @@
         "laminas/laminas-diactoros": "^2.6",
         "league/oauth2-server": "^8.3",
         "nyholm/psr7": "^1.4",
+        "ramsey/uuid": "^4.1",
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
         "symfony/flex": "^1.3.1",
