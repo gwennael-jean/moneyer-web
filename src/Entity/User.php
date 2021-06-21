@@ -24,16 +24,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     private ?int $id = null;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    #[Groups("user:read")]
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    #[Groups("user:read")]
+    private $lastname;
+
+    /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     #[Groups("user:read")]
     private string $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="boolean")
      */
-    #[Groups("user:read")]
-    private array $roles = [];
+    private $isAdmin;
 
     /**
      * @var string|null
@@ -44,7 +55,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     /**
      * @var string|null
      */
-    private ?string $plainPassword;
+    private ?string $plainPassword = null;
+
+    public function __construct()
+    {
+        $this->isAdmin = false;
+    }
 
     public function getId(): ?int
     {
@@ -54,6 +70,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     public function getIdentifier(): int
     {
         return $this->getId();
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -83,23 +123,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
         return $this->email;
     }
 
+    public function isAdmin(): ?bool
+    {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(bool $isAdmin): self
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roles = [];
+
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
+        if ($this->isAdmin()) {
+            $roles[] = 'ROLE_ADMIN';
+        }
+
         return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
     }
 
     /**

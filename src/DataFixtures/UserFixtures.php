@@ -13,7 +13,10 @@ class UserFixtures extends AbstractFixture
     {
         foreach ($this->getData() as $key => $data) {
             $entity = (new User())
+                ->setFirstname($data['firstname'])
+                ->setLastname($data['lastname'])
                 ->setEmail($data['email'])
+                ->setIsAdmin($data['is_admin'] ?? false)
                 ->setPlainPassword($data['password']);
 
             $this->addReference($this->getReferencePath(self::PREFIX_REFERENCE, $key), $entity);
