@@ -1,0 +1,6 @@
+---
+
+Client - Moneyer:
+  identifier: 123456789
+  name: Moneyer
+  redirect_uri: http://localhost:3000

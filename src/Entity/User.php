@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\EntityListeners({"App\EventListener\UserListener"})
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEntityInterface
 {
@@ -20,7 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      * @ORM\Column(type="integer")
      */
     #[Groups("user:read")]
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -35,17 +36,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var string|null
      * @ORM\Column(type="string")
      */
-    private string $password;
+    private ?string $password = null;
+
+    /**
+     * @var string|null
+     */
+    private ?string $plainPassword;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdentifier()
+    public function getIdentifier(): int
     {
         return $this->getId();
     }
@@ -74,7 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
@@ -107,6 +113,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $password): self
+    {
+        $this->password = null === $this->password ? $password : null;
+        $this->plainPassword = $password;
 
         return $this;
     }
