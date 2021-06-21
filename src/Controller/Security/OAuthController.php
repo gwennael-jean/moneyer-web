@@ -18,13 +18,13 @@ class OAuthController extends AbstractController
     {
     }
 
-    #[Route('/oauth/token', name: 'oauth_token')]
+    #[Route('/oauth/token', name: 'oauth_token', methods: 'POST')]
     public function token(Request $request, PasswordGrant $grant): Response
     {
         return $this->authServerResponseFactory->generateResponseByGrant($request, $grant);
     }
 
-    #[Route('/oauth/refresh', name: 'oauth_refresh')]
+    #[Route('/oauth/refresh', name: 'oauth_refresh', methods: 'POST')]
     public function refresh(Request $request, RefreshTokenGrant $grant): Response
     {
         return $this->authServerResponseFactory->generateResponseByGrant($request, $grant);

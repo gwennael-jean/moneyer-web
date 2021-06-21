@@ -1,0 +1,17 @@
+api_platform:
+  title: 'App REST API'
+  description: 'API to manage a your front app.'
+  version: '1.0.0'
+  mapping:
+    paths: [ '%kernel.project_dir%/config/api_platform/resources' ]
+  patch_formats:
+    json: [ 'application/json' ]
+  swagger:
+    versions: [ 3 ]
+  formats:
+    json:
+      mime_types:
+        - application/json
+    html:
+      mime_types:
+        - text/html
