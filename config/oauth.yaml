@@ -1,0 +1,24 @@
+services:
+  Laminas\Diactoros\ServerRequest: ~
+
+  League\OAuth2\Server\ResourceServer:
+    arguments:
+      $accessTokenRepository: '@App\Service\OAuth\Provider\AccessTokenProvider'
+      $publicKey: '%env(OAUTH2_PUBLIC_KEY)%'
+
+  League\OAuth2\Server\AuthorizationServer:
+    arguments:
+      $accessTokenRepository: '@App\Service\OAuth\Provider\AccessTokenProvider'
+      $clientRepository: '@App\Service\OAuth\Provider\ClientProvider'
+      $scopeRepository: '@App\Service\OAuth\Provider\ScopeProvider'
+      $privateKey: '%env(OAUTH2_PRIVATE_KEY)%'
+      $encryptionKey: '%env(OAUTH2_ENCRYPTION_KEY)%'
+
+  League\OAuth2\Server\Grant\PasswordGrant:
+    arguments:
+      $userRepository: '@App\Service\OAuth\Provider\UserProvider'
+      $refreshTokenRepository: '@App\Service\OAuth\Provider\RefreshTokenProvider'
+
+  League\OAuth2\Server\Grant\RefreshTokenGrant:
+    arguments:
+      $refreshTokenRepository: '@App\Service\OAuth\Provider\RefreshTokenProvider'
