@@ -1,0 +1,22 @@
+---
+
+gwennael.jean@mail.test:
+    firstname: Gwennael
+    lastname: Jean
+    email: gwennael.jean@mail.test
+    password: azerty
+    roles: ['ROLE_SUPER_ADMIN']
+
+travis.elliott@mail.test:
+    firstname: Travis
+    lastname: Elliott
+    email: travis.elliott@mail.test
+    password: azerty
+    roles: ['ROLE_USER']
+
+rafael.phillips@mail.test:
+    firstname: Rafael
+    lastname: Phillips
+    email: rafael.phillips@mail.test
+    password: azerty
+    roles: ['ROLE_USER']
