@@ -53,7 +53,9 @@ class UserProvider implements UserRepositoryInterface
     {
         $user = $this->userRepository->findOneByEmail($username);
 
-        $this->entities->set($user->getId(), $user);
+        if (null !== $user) {
+            $this->entities->set($user->getId(), $user);
+        }
 
         return $user;
     }
