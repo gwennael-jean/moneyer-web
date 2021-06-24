@@ -6,8 +6,8 @@ App\Entity\OAuth\RefreshToken:
       method: POST
       route_name: oauth_refresh
       openapi_context:
-        summary: "Generate new authentication's access token with refresh token"
-        description: "Generate new authentication's access token with refresh token"
+        summary: "Generate new authentication's access token with refresh token."
+        description: "Generate new authentication's access token with refresh token."
         requestBody:
           content:
             application/x-www-form-urlencoded:

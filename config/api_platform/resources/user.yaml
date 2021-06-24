@@ -1,4 +1,13 @@
 App\Entity\User:
+  collectionOperations:
+    get: ~
+    post: ~
+    profile:
+      method: GET
+      route_name: api_profile
+      openapi_context:
+        summary: "Retrieves a Current User resource."
+        description: "Retrieves a Current User resource."
   normalizationContext:
     groups:
       - "user:read"

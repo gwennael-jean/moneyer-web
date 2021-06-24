@@ -6,8 +6,8 @@ App\Entity\OAuth\AccessToken:
       method: POST
       route_name: oauth_token
       openapi_context:
-        summary: "Generate authentication's access token with credential"
-        description: "Generate authentication's access token with credential"
+        summary: "Generate authentication's access token with credential."
+        description: "Generate authentication's access token with credential."
         requestBody:
           content:
             application/x-www-form-urlencoded:
