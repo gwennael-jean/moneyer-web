@@ -3,16 +3,14 @@
 namespace App\EventListener;
 
 use App\Entity\User;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserListener
 {
-    private PasswordHasherInterface $hasher;
-
-    public function __construct(PasswordHasherFactoryInterface $passwordHasherFactory)
+    public function __construct(
+        private UserPasswordHasherInterface $userPasswordHasher
+    )
     {
-        $this->hasher = $passwordHasherFactory->getPasswordHasher(User::class);
     }
 
     public function prePersist(User $user)
@@ -28,7 +26,7 @@ class UserListener
     private function checkPassword(User $user)
     {
         if (null !== $user->getPlainPassword()) {
-            $password = $this->hasher->hash($user->getPlainPassword());
+            $password = $this->userPasswordHasher->hashPassword($user, $user->getPlainPassword());
             $user->setPassword($password);
         }
     }
