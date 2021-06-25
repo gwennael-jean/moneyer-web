@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Security\Api;
+namespace App\Security\Authenticator;
 
-use App\Security\Api\Exception\AuthenticationWithResponseException;
+use App\Security\Authenticator\Exception\AuthenticationWithResponseException;
 use Laminas\Diactoros\Response as Psr7Response;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
