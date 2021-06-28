@@ -25,5 +25,6 @@ class AccountCrudController extends AbstractCrudController
         yield TextField::new('name');
         yield AssociationField::new('owner');
         yield AssociationField::new('resources');
+        yield AssociationField::new('charges');
     }
 }

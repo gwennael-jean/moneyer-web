@@ -1,0 +1,13 @@
+---
+
+gwennael.jean@mail.test > Compte personnel:
+  name: Compte personnel
+  owner: gwennael.jean@mail.test
+
+gwennael.jean@mail.test > Compte commun:
+  name: Compte commun
+  owner: gwennael.jean@mail.test
+
+travis.elliott@mail.test > Compte Travis:
+  name: Compte Travis
+  owner: travis.elliott@mail.test
