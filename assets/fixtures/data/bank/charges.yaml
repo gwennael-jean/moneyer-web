@@ -1,0 +1,66 @@
+---
+
+gwennael.jean@mail.test > Compte personnel > Canal+:
+  name: Canal+
+  account: gwennael.jean@mail.test > Compte personnel
+  amount: 36.9
+
+gwennael.jean@mail.test > Compte personnel > Remboursement prêt voiture:
+  name: Remboursement prêt voiture
+  account: gwennael.jean@mail.test > Compte personnel
+  amount: 280.99
+
+gwennael.jean@mail.test > Compte personnel > Assurance voiture:
+  name: Assurance voiture
+  account: gwennael.jean@mail.test > Compte personnel
+  amount: 125.99
+
+gwennael.jean@mail.test > Compte commun > Loyer:
+  name: Loyer
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 750.99
+
+gwennael.jean@mail.test > Compte commun > Remboursement travaux:
+  name: Remboursement travaux
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 350.99
+
+gwennael.jean@mail.test > Compte commun > Électricité:
+  name: Électricité
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 180.99
+
+gwennael.jean@mail.test > Compte commun > Taxe foncière:
+  name: Taxe foncière
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 110
+
+gwennael.jean@mail.test > Compte commun > Taxe habitation:
+  name: Taxe habitation
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 15
+
+gwennael.jean@mail.test > Compte commun > Assurance maison:
+  name: Assurance maison
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 58.99
+
+gwennael.jean@mail.test > Compte commun > Internet:
+  name: Internet
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 39.99
+
+gwennael.jean@mail.test > Compte commun > École:
+  name: École
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 100
+
+gwennael.jean@mail.test > Compte commun > Économie:
+  name: Économie
+  account: gwennael.jean@mail.test > Compte commun
+  amount: 100
+
+travis.elliott@mail.test > Compte Travis > Assurance voiture:
+  name: Assurance voiture
+  account: travis.elliott@mail.test > Compte Travis
+  amount: 55.99

@@ -1,5 +1,14 @@
 Dashboard: Tableau de bord
 User: Utilisateur
 User list: Liste des utilisateurs
+Bank: Banque
+Account: Compte
+Account list: Liste des comptes
+
+# Labels
 Email: Email
 Password: Mot de passe
+Name: Nom
+Owner: Propriétaire
+Resources: Ressources
+Charges: Charges
