@@ -1,6 +1,12 @@
 services:
-  app.topbar.block:
+  app.block.topbar:
     class: App\Service\Block\TopbarBlock
+    arguments: ['@twig']
+    tags:
+      - { name: sonata.block }
+
+  app.block.card.account:
+    class: App\Service\Block\AccountCardBlock
     arguments: ['@twig']
     tags:
       - { name: sonata.block }

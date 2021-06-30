@@ -2,6 +2,7 @@
 
 namespace App\Service\Block;
 
+use App\Entity\Bank\Account;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\BlockServiceInterface;
 use Sonata\BlockBundle\Model\BlockInterface;
@@ -9,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
-class TopbarBlock implements BlockServiceInterface
+class AccountCardBlock implements BlockServiceInterface
 {
     public function __construct(
         private Environment $twig,
@@ -19,7 +20,9 @@ class TopbarBlock implements BlockServiceInterface
 
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
-        $content = $this->twig->render($blockContext->getTemplate());
+        $content = $this->twig->render($blockContext->getTemplate(), [
+            'account' => $blockContext->getSetting('account')
+        ]);
         $response->setContent($content);
         return $response;
     }
@@ -37,8 +40,11 @@ class TopbarBlock implements BlockServiceInterface
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'template' => 'blocks/topbar.html.twig',
+            'template' => 'blocks/cards/card--account.html.twig',
         ]);
+
+        $resolver->setRequired('account');
+        $resolver->setAllowedTypes('account', Account::class);
     }
 
 }
