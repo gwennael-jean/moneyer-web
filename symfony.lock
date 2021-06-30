@@ -135,6 +135,12 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },
+    "jms/metadata": {
+        "version": "2.5.0"
+    },
+    "jms/serializer": {
+        "version": "3.12.3"
+    },
     "laminas/laminas-code": {
         "version": "4.3.0"
     },
@@ -198,6 +204,9 @@
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
     },
+    "phpstan/phpdoc-parser": {
+        "version": "0.5.5"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -224,6 +233,30 @@
     },
     "ramsey/uuid": {
         "version": "4.1.1"
+    },
+    "sonata-project/block-bundle": {
+        "version": "4.6.0"
+    },
+    "sonata-project/cache": {
+        "version": "2.1.1"
+    },
+    "sonata-project/doctrine-extensions": {
+        "version": "1.13.0"
+    },
+    "sonata-project/form-extensions": {
+        "version": "1.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.4",
+            "ref": "bfc222606aea5418345af70104d974a25dc7c441"
+        },
+        "files": [
+            "config/packages/sonata_form.yaml"
+        ]
+    },
+    "sonata-project/twig-extensions": {
+        "version": "1.6.0"
     },
     "symfony/asset": {
         "version": "v5.3.0"

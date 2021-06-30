@@ -1,0 +1,6 @@
+services:
+  app.topbar.block:
+    class: App\Service\Block\TopbarBlock
+    arguments: ['@twig']
+    tags:
+      - { name: sonata.block }
