@@ -1,0 +1,44 @@
+{% extends 'components/card.html.twig' %}
+
+{% block card_attributes %}
+    data-controller="card-account"
+{% endblock %}
+
+{% block header %}
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="flex-fill">
+            {{ account.name }}
+            {% if account.hasResources %}
+                <span class="text-muted">
+                    ({{ account.totalResources | format_currency('EUR') }})
+                </span>
+            {% endif %}
+        </div>
+        <div>
+            <button type="button" class="btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {% for charge in account.charges %}
+        <div class="d-flex align-items-center">
+            <div class="flex-fill">{{ charge.name }}</div>
+            <div class="text-end ps-1">{{ charge.amount | format_currency('EUR') }}</div>
+            <div class="text-center ps-1">
+                <button type="button" class="btn">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block footer %}
+    <div class="d-flex align-items-center">
+        <div class="flex-fill">Total</div>
+        <div class="text-end ps-1">{{ account.total | format_currency('EUR') }}</div>
+    </div>
+{% endblock %}

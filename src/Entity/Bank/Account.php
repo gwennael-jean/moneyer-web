@@ -85,6 +85,11 @@ class Account
         return $this->resources;
     }
 
+    public function hasResources(): bool
+    {
+        return $this->resources->count() > 0;
+    }
+
     public function addResource(Resource $resource): self
     {
         if (!$this->resources->contains($resource)) {
@@ -115,6 +120,11 @@ class Account
         return $this->charges;
     }
 
+    public function hasCharges(): bool
+    {
+        return $this->charges->count() > 0;
+    }
+
     public function addCharge(Charge $charge): self
     {
         if (!$this->charges->contains($charge)) {
@@ -135,6 +145,33 @@ class Account
         }
 
         return $this;
+    }
+
+    public function getTotalResources(): float
+    {
+        $total = 0;
+
+        foreach ($this->getResources() as $resource) {
+            $total += $resource->getAmount();
+        }
+
+        return $total;
+    }
+
+    public function getTotalCharges(): float
+    {
+        $total = 0;
+
+        foreach ($this->getCharges() as $charge) {
+            $total += $charge->getAmount();
+        }
+
+        return $total;
+    }
+
+    public function getTotal(): float
+    {
+        return $this->getTotalResources() - $this->getTotalCharges();
     }
 
     public function __toString(): string

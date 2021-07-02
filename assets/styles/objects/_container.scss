@@ -1,0 +1,4 @@
+div.container-with-topbar {
+  @extend .container-fluid;
+  margin-top: calc(56px + #{$container-padding-x});
+}
