@@ -10,3 +10,9 @@ services:
     arguments: ['@twig']
     tags:
       - { name: sonata.block }
+
+  app.block.table.transfers:
+    class: App\Service\Block\TransfersTableBlock
+    arguments: ['@twig']
+    tags:
+      - { name: sonata.block }
