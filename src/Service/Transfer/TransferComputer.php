@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Service\Transfer\Model\Transfer;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Service\Transfer\Model\Account as AccountDto;
+use WeakMap;
 
 class TransferComputer
 {
@@ -20,23 +21,23 @@ class TransferComputer
         $transfers = new ArrayCollection();
 
         $creditedAccounts = new ArrayCollection();
-        $creditedAccountsDto = new ArrayCollection();
+        $creditedAccountsDto = new WeakMap();
         $debitedAccounts = new ArrayCollection();
-        $debitedAccountsDto = new ArrayCollection();
+        $debitedAccountsDto = new WeakMap();
 
         foreach ($accounts as $account) {
             if ($account->getTotal() > 0) {
                 $creditedAccounts->add($account);
-                $creditedAccountsDto->set($account->getId(), $this->createAccountDto($account));
+                $creditedAccountsDto[$account] = $this->createAccountDto($account);
             } else {
                 $debitedAccounts->add($account);
-                $debitedAccountsDto->set($account->getId(), $this->createAccountDto($account));
+                $debitedAccountsDto[$account] = $this->createAccountDto($account);
             }
         }
 
         /** @var Account $debitedAccount */
         foreach ($debitedAccounts as $debitedAccount) {
-            $debitedAccountDto = $debitedAccountsDto->get($debitedAccount->getId());
+            $debitedAccountDto = $debitedAccountsDto[$debitedAccount];
 
             foreach ($debitedAccount->getCharges() as $charge) {
 
@@ -44,7 +45,7 @@ class TransferComputer
                 $creditedAccountDto = null;
 
                 $creditedAccountsFiltered = $creditedAccounts->filter(function (Account $account, int $id) use ($creditedAccountsDto, $charge) {
-                    $creditedAccountDto = $creditedAccountsDto->get($account->getId());
+                    $creditedAccountDto = $creditedAccountsDto[$account];
                     return $creditedAccountDto->getTotal() >= $charge->getAmount();
                 });
 
@@ -53,7 +54,7 @@ class TransferComputer
                 }
 
                 if (null !== $creditedAccount) {
-                    $creditedAccountDto = $creditedAccountsDto->get($creditedAccount->getId());
+                    $creditedAccountDto = $creditedAccountsDto[$creditedAccount];
 
                     $transfer = $this->getTransfer($transfers, $user, $creditedAccount, $debitedAccount);
                     $transfer->addAmount($charge->getAmount());
