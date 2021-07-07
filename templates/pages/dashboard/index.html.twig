@@ -41,5 +41,15 @@
                 </div>
             {% endfor %}
         </div>
+
+        <h1>{% trans %}Transfers{% endtrans %}</h1>
+
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                {{ sonata_block_render({ type: 'app.block.table.transfers' }, {
+                    transfers: transfers
+                }) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,0 +1,20 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>{% trans %}User{% endtrans %}</th>
+        <th>{% trans %}Account from{% endtrans %}</th>
+        <th>{% trans %}Account to{% endtrans %}</th>
+        <th>{% trans %}Amount{% endtrans %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for transfer in transfers %}
+        <tr>
+            <td>{{ transfer.user.fullname }}</td>
+            <td>{{ transfer.from.name }}</td>
+            <td>{{ transfer.to.name }}</td>
+            <td>{{ transfer.amount | format_currency('EUR') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
