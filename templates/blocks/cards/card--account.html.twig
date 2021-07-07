@@ -15,9 +15,33 @@
             {% endif %}
         </div>
         <div>
-            <button type="button" class="btn">
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="dropdown">
+                <button class="btn" type="button" id="button-account-{{ account.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button-account-{{ account.id }}">
+                    <li>
+                        <a class="dropdown-item" href="{{ path('account-update', { id: account.id }) }}">
+                            {% trans %}Update{% endtrans %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#" data-action="card-account#openModal">
+                            {% trans %}Add resource{% endtrans %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#" data-action="card-account#openModal">
+                            {% trans %}Add charge{% endtrans %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            {% trans %}Share account{% endtrans %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}
