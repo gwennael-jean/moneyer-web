@@ -20,6 +20,7 @@
         "nyholm/psr7": "^1.4",
         "phpdocumentor/reflection-docblock": "^5.2",
         "ramsey/uuid": "^4.1",
+        "sensio/framework-extra-bundle": "^6.1",
         "sonata-project/block-bundle": "^4.6",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
