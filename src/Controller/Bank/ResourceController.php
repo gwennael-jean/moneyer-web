@@ -2,12 +2,10 @@
 
 namespace App\Controller\Bank;
 
-use App\Entity\Bank\Account;
-use App\Entity\Bank\Resource;
+use App\Entity\Bank;
 use App\Form\Bank\ResourceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,9 +16,9 @@ class ResourceController extends AbstractController
     #[Route('/bank/account/{account}/resource/{resource}/update', name: 'bank_resource_update')]
     #[ParamConverter('account', options: ['mapping' => ['account' => 'id']])]
     #[ParamConverter('resource', options: ['mapping' => ['resource' => 'id']])]
-    public function add(Request $request, Account $account, ?Resource $resource = null): Response
+    public function add(Request $request, Bank\Account $account, ?Bank\Resource $resource = null): Response
     {
-        $resource = $resource ?? (new Resource())
+        $resource = $resource ?? (new Bank\Resource())
                 ->setAccount($account);
 
         $form = $this->createForm(ResourceType::class, $resource);
@@ -45,6 +43,22 @@ class ResourceController extends AbstractController
         return $this->render($template, [
             'resource' => $resource,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/bank/resource/{resource}/delete', name: 'bank_resource_delete')]
+    public function delete(Request $request, Bank\Resource $resource)
+    {
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $this->getDoctrine()->getManager()->remove($resource);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', "Resource deleted successfully.");
+            return $this->redirectToRoute('dashboard');
+        }
+
+        return $this->render("pages/bank/resource/delete.html.twig", [
+            'resource' => $resource
         ]);
     }
 }

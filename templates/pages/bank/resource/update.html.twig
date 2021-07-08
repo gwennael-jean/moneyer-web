@@ -11,6 +11,10 @@
             <i class="fas fa-save"></i>
             {% trans %}Update{% endtrans %}
         </button>
+        <a  class="btn btn-danger" href="{{ path('bank_resource_delete', { resource: resource.id }) }}">
+            <i class="fas fa-trash-alt"></i>
+            {% trans %}Delete{% endtrans %}
+        </a>
         {{ form_end(form) }}
     </div>
 {% endblock %}
