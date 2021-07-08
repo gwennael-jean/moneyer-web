@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 
-class UserFixtures extends AbstractFixture
+class UserFixture extends AbstractFixture
 {
     const PREFIX_REFERENCE = 'user';
 
