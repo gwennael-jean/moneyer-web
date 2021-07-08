@@ -3,10 +3,7 @@
 namespace App\Controller\Bank;
 
 use App\Entity\Bank\Account;
-use App\Entity\User;
 use App\Form\Bank\AccountType;
-use App\Service\Provider\Bank\AccountProvider;
-use App\Service\Transfer\TransferComputer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccountController extends AbstractController
 {
-
-    #[Route('/account/{id}/update', name: 'account-update')]
+    #[Route('/account/{account}/update', name: 'bank_account_update')]
     public function index(Request $request, Account $account): Response
     {
         $form = $this->createForm(AccountType::class, $account, [
@@ -28,7 +24,7 @@ class AccountController extends AbstractController
             $this->getDoctrine()->getManager()->persist($account);
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', "Account save successfully.");
+            $this->addFlash('success', "Account saved successfully.");
             return $this->redirectToRoute('dashboard');
         }
 

@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% trans %}Dashboard{% endtrans %}{{ parent() }}{% endblock %}
-
 {% block header %}
     {{ sonata_block_render({ type: 'app.block.topbar' }) }}
     <div class="container-with-topbar">
