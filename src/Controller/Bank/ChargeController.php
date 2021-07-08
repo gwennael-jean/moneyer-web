@@ -2,12 +2,10 @@
 
 namespace App\Controller\Bank;
 
-use App\Entity\Bank\Account;
-use App\Entity\Bank\Charge;
+use App\Entity\Bank;
 use App\Form\Bank\ChargeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,9 +16,9 @@ class ChargeController extends AbstractController
     #[Route('/bank/account/{account}/charge/{charge}/update', name: 'bank_charge_update')]
     #[ParamConverter('account', options: ['mapping' => ['account' => 'id']])]
     #[ParamConverter('charge', options: ['mapping' => ['charge' => 'id']])]
-    public function add(Request $request, Account $account, ?Charge $charge = null): Response
+    public function add(Request $request, Bank\Account $account, ?Bank\Charge $charge = null): Response
     {
-        $charge = $charge ?? (new Charge())
+        $charge = $charge ?? (new Bank\Charge())
             ->setAccount($account);
 
         $form = $this->createForm(ChargeType::class, $charge);
@@ -45,6 +43,22 @@ class ChargeController extends AbstractController
         return $this->render($template, [
             'charge' => $charge,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/bank/charge/{charge}/delete', name: 'bank_charge_delete')]
+    public function delete(Request $request, Bank\Charge $charge)
+    {
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $this->getDoctrine()->getManager()->remove($charge);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', "Charge deleted successfully.");
+            return $this->redirectToRoute('dashboard');
+        }
+
+        return $this->render("pages/bank/charge/delete.html.twig", [
+            'charge' => $charge
         ]);
     }
 }

@@ -1,0 +1,18 @@
+{% extends 'base-connected.html.twig' %}
+
+{% block title %}{% trans %}Delete charge{% endtrans %}{{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="mb-3">
+        <h1>{% trans %}Delete charge{% endtrans %}</h1>
+        <p>
+            {% trans %}Delete charge confirmation message.{% endtrans %}
+        </p>
+        <form method="post">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i>
+                {% trans %}Confirm{% endtrans %}
+            </button>
+        </form>
+    </div>
+{% endblock %}
