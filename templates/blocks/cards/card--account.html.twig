@@ -52,7 +52,7 @@
             <div class="flex-fill">{{ charge.name }}</div>
             <div class="text-end ps-1">{{ charge.amount | format_currency('EUR') }}</div>
             <div class="text-center ps-1">
-                <a type="button" class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
+                <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
             </div>
