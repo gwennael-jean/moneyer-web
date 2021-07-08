@@ -1,4 +1,10 @@
 services:
+  app.block.flash:
+    class: App\Service\Block\MessageFlashBlock
+    arguments: ['@twig']
+    tags:
+      - { name: sonata.block }
+
   app.block.topbar:
     class: App\Service\Block\TopbarBlock
     arguments: ['@twig']
