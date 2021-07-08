@@ -16,9 +16,7 @@ class AccountProvider
 
     public function getByUser(User $user): ArrayCollection
     {
-        $accounts = $this->accountRepository->findBy([
-            'owner' => $user
-        ]);
+        $accounts = $this->accountRepository->findByUser($user);
 
         return new ArrayCollection($accounts);
     }
