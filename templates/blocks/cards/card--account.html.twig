@@ -21,12 +21,12 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button-account-{{ account.id }}">
                     <li>
-                        <a class="dropdown-item" href="{{ path('account-update', { id: account.id }) }}">
+                        <a class="dropdown-item" href="{{ path('bank_account_update', { account: account.id }) }}">
                             {% trans %}Update{% endtrans %}
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#" data-action="card-account#openModal">
+                        <a class="dropdown-item" href="{{ path('bank_resource_add', { account: account.id }) }}">
                             {% trans %}Add resource{% endtrans %}
                         </a>
                     </li>
