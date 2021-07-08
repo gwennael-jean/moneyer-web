@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Bank\AccountShare;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -57,9 +60,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      */
     private ?string $plainPassword = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity=AccountShare::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $accountShares;
+
     public function __construct()
     {
         $this->isAdmin = false;
+        $this->accountShares = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,5 +217,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     public function __toString(): string
     {
         return $this->getEmail();
+    }
+
+    /**
+     * @return Collection|AccountShare[]
+     */
+    public function getAccountShares(): Collection
+    {
+        return $this->accountShares;
+    }
+
+    public function addAccountShare(AccountShare $accountShare): self
+    {
+        if (!$this->accountShares->contains($accountShare)) {
+            $this->accountShares[] = $accountShare;
+            $accountShare->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccountShare(AccountShare $accountShare): self
+    {
+        if ($this->accountShares->removeElement($accountShare)) {
+            // set the owning side to null (unless already changed)
+            if ($accountShare->getUser() === $this) {
+                $accountShare->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

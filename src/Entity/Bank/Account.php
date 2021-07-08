@@ -42,10 +42,16 @@ class Account
      */
     private $charges;
 
+    /**
+     * @ORM\OneToMany(targetEntity=AccountShare::class, mappedBy="account", orphanRemoval=true)
+     */
+    private $accountShares;
+
     public function __construct()
     {
         $this->resources = new ArrayCollection();
         $this->charges = new ArrayCollection();
+        $this->accountShares = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,5 +183,35 @@ class Account
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return Collection|AccountShare[]
+     */
+    public function getAccountShares(): Collection
+    {
+        return $this->accountShares;
+    }
+
+    public function addAccountShare(AccountShare $accountShare): self
+    {
+        if (!$this->accountShares->contains($accountShare)) {
+            $this->accountShares[] = $accountShare;
+            $accountShare->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccountShare(AccountShare $accountShare): self
+    {
+        if ($this->accountShares->removeElement($accountShare)) {
+            // set the owning side to null (unless already changed)
+            if ($accountShare->getAccount() === $this) {
+                $accountShare->setAccount(null);
+            }
+        }
+
+        return $this;
     }
 }
