@@ -18,9 +18,9 @@
                                 {{ resource.amount | format_currency('EUR') }}
                             </div>
                             <div class="ps-1">
-                                <button type="button" class="btn">
+                                <a class="btn" href="{{ path('bank_resource_update', { account: resource.account.id, resource: resource.id }) }}">
                                     <i class="fas fa-pencil-alt"></i>
-                                </button>
+                                </a>
                             </div>
                         </li>
                     {% endfor %}
