@@ -70,6 +70,11 @@ class AccountShare
         return $this->type;
     }
 
+    public function isType($type): bool
+    {
+        return $this->getType() === $type;
+    }
+
     public function setType($type): self
     {
         $this->type = $type;

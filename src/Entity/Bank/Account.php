@@ -214,4 +214,9 @@ class Account
 
         return $this;
     }
+
+    public function getShareUsers(): Collection
+    {
+        return $this->getAccountShares()->map(fn(AccountShare $accountShare) => $accountShare->getUser());
+    }
 }
