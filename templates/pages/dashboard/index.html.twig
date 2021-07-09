@@ -32,11 +32,13 @@
     <h1>{% trans %}Charges{% endtrans %}</h1>
     <div class="row">
         {% for account in accounts %}
-            <div class="col-12 col-sm-6 col-lg-4">
-                {{ sonata_block_render({ type: 'app.block.card.account' }, {
-                    account: account
-                }) }}
-            </div>
+            {% if is_granted('view', account) %}
+                <div class="col-12 col-sm-6 col-lg-4">
+                    {{ sonata_block_render({ type: 'app.block.card.account' }, {
+                        account: account
+                    }) }}
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
 

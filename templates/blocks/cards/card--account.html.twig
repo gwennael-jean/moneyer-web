@@ -16,30 +16,46 @@
         </div>
         <div>
             <div class="dropdown">
-                <button class="btn" type="button" id="button-account-{{ account.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn" type="button" id="button-account-{{ account.id }}" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button-account-{{ account.id }}">
-                    <li>
-                        <a class="dropdown-item" href="{{ path('bank_account_update', { account: account.id }) }}">
-                            {% trans %}Update{% endtrans %}
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ path('bank_resource_add', { account: account.id }) }}">
-                            {% trans %}Add resource{% endtrans %}
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ path('bank_charge_add', { account: account.id }) }}">
-                            {% trans %}Add charge{% endtrans %}
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            {% trans %}Share account{% endtrans %}
-                        </a>
-                    </li>
+                    {% if is_granted('edit', account) %}
+                        <li>
+                            <a class="dropdown-item" href="{{ path('bank_account_update', { account: account.id }) }}">
+                                <i class="fas fa-pencil-alt"></i>
+                                {% trans %}Update{% endtrans %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if is_granted('edit', account) %}
+                        <li>
+                            <a class="dropdown-item" href="{{ path('bank_resource_add', { account: account.id }) }}">
+                                <i class="fas fa-plus"></i>
+                                {% trans %}Add resource{% endtrans %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if is_granted('edit', account) %}
+                        <li>
+                            <a class="dropdown-item" href="{{ path('bank_charge_add', { account: account.id }) }}">
+                                <i class="fas fa-plus"></i>
+                                {% trans %}Add charge{% endtrans %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if is_granted('share', account) %}
+                        <li>
+                            <a class="dropdown-item" href="{{ path('bank_account_share', { account: account.id }) }}">
+                                <i class="fas fa-share-alt"></i>
+                                {% trans %}Share account{% endtrans %}
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -47,17 +63,19 @@
 {% endblock %}
 
 {% block body %}
-    {% for charge in account.charges %}
-        <div class="d-flex align-items-center">
-            <div class="flex-fill">{{ charge.name }}</div>
-            <div class="text-end ps-1">{{ charge.amount | format_currency('EUR') }}</div>
-            <div class="text-center ps-1">
-                <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
-            </div>
-        </div>
-    {% endfor %}
+    <table class="table table-borderless table-sm table-hover table-py-0">
+        {% for charge in account.charges %}
+            <tr class="align-middle">
+                <td class="w-100">{{ charge.name }}</td>
+                <td class="text-end">{{ charge.amount | format_currency('EUR') }}</td>
+                <td class="text-center">
+                    <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 
 {% block footer %}

@@ -56,7 +56,7 @@ class TransferComputer
                 if (null !== $creditedAccount) {
                     $creditedAccountDto = $creditedAccountsDto[$creditedAccount];
 
-                    $transfer = $this->getTransfer($transfers, $user, $creditedAccount, $debitedAccount);
+                    $transfer = $this->getTransfer($transfers, $creditedAccount, $debitedAccount);
                     $transfer->addAmount($charge->getAmount());
 
                     $creditedAccountDto->addCharge($charge->getAmount());
@@ -68,28 +68,26 @@ class TransferComputer
         return $transfers;
     }
 
-    private function getTransfer(ArrayCollection $transfers, User $user, Account $from, Account $to): Transfer
+    private function getTransfer(ArrayCollection $transfers, Account $from, Account $to): Transfer
     {
-        $filteredTransfers = $transfers->filter(function (Transfer $transfer) use ($user, $from, $to) {
-            return $transfer->getUser() === $user
-                && $transfer->getFrom() === $from
-                && $transfer->getTo() === $to;
+        $filteredTransfers = $transfers->filter(function (Transfer $transfer) use ($from, $to) {
+            return $transfer->getFrom() === $from && $transfer->getTo() === $to;
         });
 
         if ($filteredTransfers->count() === 1) {
             $transfer = $filteredTransfers->first();
         } else {
-            $transfer = $this->createTransfer($user, $from, $to);
+            $transfer = $this->createTransfer($from, $to);
             $transfers->add($transfer);
         }
 
         return $transfer;
     }
 
-    private function createTransfer(User $user, Account $from, Account $to, float $amount = 0): Transfer
+    private function createTransfer(Account $from, Account $to, float $amount = 0): Transfer
     {
         return (new Transfer())
-            ->setUser($user)
+            ->setUser($from->getOwner())
             ->setFrom($from)
             ->setTo($to)
             ->setAmount($amount);

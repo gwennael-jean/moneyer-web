@@ -11,3 +11,8 @@ gwennael.jean@mail.test > Compte commun:
 travis.elliott@mail.test > Compte Travis:
   name: Compte Travis
   owner: travis.elliott@mail.test
+
+rafael:
+  phillips:@mail.test > Compte Rafael:
+  name: Compte Rafael
+  owner: rafael.phillips@mail.test

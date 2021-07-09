@@ -1,0 +1,32 @@
+{% extends 'base-connected.html.twig' %}
+
+{% block title %}{% trans %}Share account{% endtrans %}{{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-3">
+            <h1>{% trans %}Share account{% endtrans %}</h1>
+            <div class="row">
+                <div class="col-12 col-lg-4">
+                    <table class="table table-borderless">
+                        {% for accountShare in account.accountShares %}
+                            <tr>
+                                <td>{{ accountShare.user.fullname }}</td>
+                                <td>{{ accountShare.type | readable_enum | trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="col-12 col-lg-8">
+                    {{ form_start(form) }}
+                    {{ form_rest(form) }}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        {% trans %}Share{% endtrans %}
+                    </button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
