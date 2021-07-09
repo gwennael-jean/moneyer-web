@@ -1,0 +1,6 @@
+.table-py-0 {
+  // stylelint-disable-next-line selector-max-universal
+  > :not(caption) > * > * {
+    padding: 0 $table-cell-padding-x-sm;
+  }
+}

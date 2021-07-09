@@ -15,11 +15,13 @@ class AccountVoter extends Voter
 
     const EDIT = 'edit';
 
+    const SHARE = 'share';
+
     const DELETE = 'delete';
 
     protected function supports(string $attribute, $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::EDIT])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::SHARE, self::DELETE])
             && $subject instanceof Account;
     }
 
@@ -34,6 +36,7 @@ class AccountVoter extends Voter
         switch ($attribute) {
             case self::VIEW: return $this->isOwner($subject, $user) || $this->canView($subject, $user);
             case self::EDIT: return $this->isOwner($subject, $user) || $this->canEdit($subject, $user);
+            case self::SHARE:
             case self::DELETE: return $this->isOwner($subject, $user);
         }
 

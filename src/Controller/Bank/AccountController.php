@@ -43,7 +43,7 @@ class AccountController extends AbstractController
     #[Route('/account/{account}/share', name: 'bank_account_share')]
     public function share(Request $request, Account $account): Response
     {
-        $this->denyAccessUnlessGranted(AccountVoter::EDIT, $account);
+        $this->denyAccessUnlessGranted(AccountVoter::SHARE, $account);
 
         $accountShare = (new AccountShare())
             ->setAccount($account);
