@@ -22,21 +22,25 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button-account-{{ account.id }}">
                     <li>
                         <a class="dropdown-item" href="{{ path('bank_account_update', { account: account.id }) }}">
+                            <i class="fas fa-pencil-alt"></i>
                             {% trans %}Update{% endtrans %}
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ path('bank_resource_add', { account: account.id }) }}">
+                            <i class="fas fa-plus"></i>
                             {% trans %}Add resource{% endtrans %}
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ path('bank_charge_add', { account: account.id }) }}">
+                            <i class="fas fa-plus"></i>
                             {% trans %}Add charge{% endtrans %}
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{ path('bank_account_share', { account: account.id }) }}">
+                            <i class="fas fa-share-alt"></i>
                             {% trans %}Share account{% endtrans %}
                         </a>
                     </li>

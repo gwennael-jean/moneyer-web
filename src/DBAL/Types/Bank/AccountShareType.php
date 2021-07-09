@@ -6,8 +6,8 @@ use Fresh\DoctrineEnumBundle\DBAL\Types\AbstractEnumType;
 
 final class AccountShareType extends AbstractEnumType
 {
-    public const VIEW = 'view';
-    public const EDIT = 'edit';
+    public const VIEW = 'VIEW';
+    public const EDIT = 'EDIT';
 
     protected static $choices = [
         self::VIEW => 'View',

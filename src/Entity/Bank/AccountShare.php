@@ -5,11 +5,17 @@ namespace App\Entity\Bank;
 use App\Entity\User;
 use App\Repository\Bank\AccountShareRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=AccountShareRepository::class)
  * @ORM\Table(name="bank_account_share")
  */
+#[UniqueEntity(
+    fields: ['account', 'user'],
+    message: 'This account is already shared for this user.',
+    errorPath: 'user',
+)]
 class AccountShare
 {
     /**
@@ -26,7 +32,7 @@ class AccountShare
     private $account;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="accountShares")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="accountShares", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
