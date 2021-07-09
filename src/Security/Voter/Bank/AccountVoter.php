@@ -47,14 +47,14 @@ class AccountVoter extends Voter
 
     private function canView(Account $account, User $user): bool
     {
-        return !$account->getAccountShares()
+        return $this->canEdit($account, $user) || !$account->getAccountShares()
             ->filter(fn(AccountShare $accountShare) => $accountShare->getUser() === $user && $accountShare->isType(AccountShareType::VIEW))
             ->isEmpty();
     }
 
     private function canEdit(Account $account, User $user): bool
     {
-        return $this->canView($account, $user) || !$account->getAccountShares()
+        return !$account->getAccountShares()
             ->filter(fn(AccountShare $accountShare) => $accountShare->getUser() === $user && $accountShare->isType(AccountShareType::EDIT))
             ->isEmpty();
     }
