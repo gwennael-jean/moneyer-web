@@ -5,6 +5,7 @@ namespace App\Repository\Bank;
 use App\Entity\Bank\Account;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -25,10 +26,14 @@ class AccountRepository extends ServiceEntityRepository
       */
     public function findByUser(User $user)
     {
-        return $this->createQueryBuilder('a')
+        $queryBuilder = $this->createQueryBuilder('a');
+
+        return $queryBuilder
             ->leftJoin('a.accountShares', 's')
             ->andWhere('a.owner = :user OR s.user = :user')
             ->setParameter('user', $user)
+            ->orderBy("IF(a.owner = :user, 1, 0)", Criteria::DESC)
+            ->addOrderBy("a.id")
             ->getQuery()
             ->getResult()
         ;
