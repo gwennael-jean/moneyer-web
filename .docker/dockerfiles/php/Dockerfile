@@ -18,9 +18,10 @@ RUN docker-php-ext-configure gd --enable-gd --with-jpeg --with-freetype
 
 ADD ./conf/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 ADD ./conf/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-ADD ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 ADD conf/core.ini /usr/local/etc/php/conf.d/core.ini
 ADD conf/date.ini /usr/local/etc/php/conf.d/date.ini
+ADD ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+ADD ./conf/error_reporting.ini /usr/local/etc/php/conf.d/error_reporting.ini
 
 RUN pecl install apcu
 
