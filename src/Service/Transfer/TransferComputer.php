@@ -46,7 +46,8 @@ class TransferComputer
 
                 $creditedAccountsFiltered = $creditedAccounts->filter(function (Account $account, int $id) use ($creditedAccountsDto, $charge) {
                     $creditedAccountDto = $creditedAccountsDto[$account];
-                    return $creditedAccountDto->getTotal() >= $charge->getAmount();
+                    return $account->getOwner() === $charge->getAccount()->getOwner()
+                        && $creditedAccountDto->getTotal() >= $charge->getAmount();
                 });
 
                 if (!$creditedAccountsFiltered->isEmpty()) {
