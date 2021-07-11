@@ -2,15 +2,32 @@
 
 namespace App\Service\Transfer;
 
+use App\DBAL\Types\Bank\ChargeDistributionType;
 use App\Entity\Bank\Account;
 use App\Entity\User;
-use App\Service\Transfer\Model\Transfer;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Service\Transfer\Model\Account as AccountDto;
 use WeakMap;
 
 class TransferComputer
 {
+    private ArrayCollection $transferChargeDistributions;
+
+    public function __construct()
+    {
+        $this->transferChargeDistributions = new ArrayCollection();
+    }
+
+    public function getTransferChargeDistribution(string $type): TransferChargeDistribution
+    {
+        return $this->transferChargeDistributions->get($type);
+    }
+
+    public function addTransferChargeDistribution(TransferChargeDistribution $transferChargeDistribution): void
+    {
+        $this->transferChargeDistributions->set($transferChargeDistribution->getType(), $transferChargeDistribution);
+    }
+
     /**
      * @param User $user
      * @param ArrayCollection|Account[] $accounts
@@ -37,61 +54,20 @@ class TransferComputer
 
         /** @var Account $debitedAccount */
         foreach ($debitedAccounts as $debitedAccount) {
-            $debitedAccountDto = $debitedAccountsDto[$debitedAccount];
-
             foreach ($debitedAccount->getCharges() as $charge) {
+                $type = null !== $charge->getChargeDistribution()
+                    ? $charge->getChargeDistribution()->getType()
+                    : ChargeDistributionType::VIEW;
 
-                $creditedAccount = null;
-                $creditedAccountDto = null;
+                $transferChargeDistribution = $this->getTransferChargeDistribution($type);
 
-                $creditedAccountsFiltered = $creditedAccounts->filter(function (Account $account, int $id) use ($creditedAccountsDto, $charge) {
-                    $creditedAccountDto = $creditedAccountsDto[$account];
-                    return $account->getOwner() === $charge->getAccount()->getOwner()
-                        && $creditedAccountDto->getTotal() >= $charge->getAmount();
-                });
-
-                if (!$creditedAccountsFiltered->isEmpty()) {
-                    $creditedAccount = $creditedAccountsFiltered->first();
-                }
-
-                if (null !== $creditedAccount) {
-                    $creditedAccountDto = $creditedAccountsDto[$creditedAccount];
-
-                    $transfer = $this->getTransfer($transfers, $creditedAccount, $debitedAccount);
-                    $transfer->addAmount($charge->getAmount());
-
-                    $creditedAccountDto->addCharge($charge->getAmount());
-                    $debitedAccountDto->addResource($charge->getAmount());
-                }
+                $transferChargeDistribution->setCreditedAccounts($creditedAccounts, $creditedAccountsDto);
+                $transferChargeDistribution->setDebitedAccounts($debitedAccounts, $debitedAccountsDto);
+                $transferChargeDistribution->execute($charge, $transfers);
             }
         }
 
         return $transfers;
-    }
-
-    private function getTransfer(ArrayCollection $transfers, Account $from, Account $to): Transfer
-    {
-        $filteredTransfers = $transfers->filter(function (Transfer $transfer) use ($from, $to) {
-            return $transfer->getFrom() === $from && $transfer->getTo() === $to;
-        });
-
-        if ($filteredTransfers->count() === 1) {
-            $transfer = $filteredTransfers->first();
-        } else {
-            $transfer = $this->createTransfer($from, $to);
-            $transfers->add($transfer);
-        }
-
-        return $transfer;
-    }
-
-    private function createTransfer(Account $from, Account $to, float $amount = 0): Transfer
-    {
-        return (new Transfer())
-            ->setUser($from->getOwner())
-            ->setFrom($from)
-            ->setTo($to)
-            ->setAmount($amount);
     }
 
     private function createAccountDto(Account $account): AccountDto
