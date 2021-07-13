@@ -7,8 +7,6 @@ use App\Entity\Bank\Account;
 use App\Entity\User;
 use App\Service\Transfer\TransferChargeDistribution\AccountWeakMap;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Service\Transfer\Model\Account as AccountDto;
-use WeakMap;
 
 class TransferComputer
 {

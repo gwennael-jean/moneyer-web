@@ -15,31 +15,13 @@ class DefaultTransferChargeDistribution extends TransferChargeDistribution
     {
         return ChargeDistributionType::VIEW;
     }
-    
+
     public function execute(Charge $charge, ArrayCollection $transfers): void
     {
-        $creditedAccount = null;
-
-        $creditedAccountsFiltered = $this->getAccountWeakMap()->getCreditedAccounts()
-            ->filter(function (Account $account) use ($charge) {
-                $creditedAccountDto = $this->getAccountWeakMap()->getCreditedAccountDto($account);
-                return $account->getOwner() === $charge->getAccount()->getOwner()
-                    && $creditedAccountDto->getTotal() >= $charge->getAmount();
-            });
-
-        if (!$creditedAccountsFiltered->isEmpty()) {
-            $creditedAccount = $creditedAccountsFiltered->first();
-        }
+        $creditedAccount = $this->findCreditedAccount($charge);
 
         if (null !== $creditedAccount) {
-            $creditedAccountDto = $this->getAccountWeakMap()->getCreditedAccountDto($creditedAccount);
-            $debitedAccountDto = $this->getAccountWeakMap()->getDebitedAccountDto($charge->getAccount());
-
-            $transfer = $this->getTransfer($transfers, $creditedAccount, $charge->getAccount());
-            $transfer->addAmount($charge->getAmount());
-
-            $creditedAccountDto->addCharge($charge->getAmount());
-            $debitedAccountDto->addResource($charge->getAmount());
+            $this->transferProcess($creditedAccount, $charge, $transfers, $charge->getAmount());
         }
     }
 }

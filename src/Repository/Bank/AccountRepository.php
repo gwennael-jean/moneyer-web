@@ -35,8 +35,7 @@ class AccountRepository extends ServiceEntityRepository
             ->orderBy("IF(a.owner = :user, 1, 0)", Criteria::DESC)
             ->addOrderBy("a.id")
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /*

@@ -7,20 +7,23 @@ use App\Entity\Bank\Account;
 use App\Entity\Bank\Charge;
 use App\Entity\User;
 use App\Service\Provider\Bank\AccountProvider;
+use App\Service\Provider\Bank\ResourceProvider;
 use App\Service\Transfer\TransferChargeDistribution;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Service\Transfer\TransferChargeDistribution\Model\ResourcePercent;
 
-class FiftyFiftyTransferChargeDistribution extends TransferChargeDistribution
+class ResourcePercentTransferChargeDistribution extends TransferChargeDistribution
 {
     public function __construct(
-        private AccountProvider $accountProvider
+        private AccountProvider $accountProvider,
+        private ResourceProvider $resourceProvider,
     )
     {
     }
 
     public function getType(): string
     {
-        return ChargeDistributionType::FIFTY_FIFTY;
+        return ChargeDistributionType::RESOURCE_PERCENT;
     }
 
     public function execute(Charge $charge, ArrayCollection $transfers): void
@@ -28,10 +31,17 @@ class FiftyFiftyTransferChargeDistribution extends TransferChargeDistribution
         $users = $charge->getChargeDistribution()->getUsers();
         $users->add($charge->getAccount()->getOwner());
 
-        $amount = $charge->getAmount() / count($users);
+        $resourcesPercent = new ResourcePercent();
 
         /** @var User $user */
         foreach ($users as $user) {
+            $resourcesPercent->addResources($user, $this->resourceProvider->getByUser($user));
+        }
+
+        foreach ($users as $user) {
+
+            $amount = $charge->getAmount() * $resourcesPercent->getPercent($user);
+
             $creditedAccounts = $this->accountProvider->getByUser($user)
                 ->filter(fn (Account $account) => $account->getTotal() >= $amount);
 
@@ -41,6 +51,9 @@ class FiftyFiftyTransferChargeDistribution extends TransferChargeDistribution
         }
 
         foreach ($users as $user) {
+
+            $amount = $charge->getAmount() * $resourcesPercent->getPercent($user);
+
             $creditedAccount = $this->findCreditedAccount($charge, [
                 'user' => $user,
                 'amount' => $amount,

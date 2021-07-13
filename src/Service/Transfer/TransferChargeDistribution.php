@@ -7,7 +7,6 @@ use App\Entity\Bank\Charge;
 use App\Service\Transfer\Model\Transfer;
 use App\Service\Transfer\TransferChargeDistribution\AccountWeakMap;
 use Doctrine\Common\Collections\ArrayCollection;
-use WeakMap;
 
 abstract class TransferChargeDistribution
 {
@@ -31,6 +30,51 @@ abstract class TransferChargeDistribution
     public abstract function getType(): string;
 
     public abstract function execute(Charge $charge, ArrayCollection $transfers): void;
+
+    /**
+     * Methode permettant de récupérer un compte credite
+     *
+     * @param Charge $charge
+     * @param array $options
+     * @return Account|null
+     */
+    protected function findCreditedAccount(Charge $charge, array $options = []): ?Account
+    {
+        $creditedAccountsFiltered = $this->getAccountWeakMap()->getCreditedAccounts()
+            ->filter(fn (Account $account) => $this->creditedAccountfilter($account, $charge, $options));
+
+        return !$creditedAccountsFiltered->isEmpty()
+            ? $creditedAccountsFiltered->first()
+            : null;
+    }
+
+    /**
+     * Cette methode est appele dans findCreditedAccount() afin e filtrer les comptes pouvant supporter la charge
+     *
+     * @param Account $account
+     * @param Charge $charge
+     * @param array $options
+     * @return bool
+     */
+    protected function creditedAccountfilter(Account $account, Charge $charge, array $options = []): bool
+    {
+        $creditedAccountDto = $this->getAccountWeakMap()->getCreditedAccountDto($account);
+
+        return $account->getOwner() === $charge->getAccount()->getOwner()
+            && $creditedAccountDto->getTotal() >= $charge->getAmount();
+    }
+
+    protected function transferProcess(Account $creditedAccount, Charge $charge, ArrayCollection $transfers, float $amount)
+    {
+        $creditedAccountDto = $this->getAccountWeakMap()->getCreditedAccountDto($creditedAccount);
+        $debitedAccountDto = $this->getAccountWeakMap()->getDebitedAccountDto($charge->getAccount());
+
+        $transfer = $this->getTransfer($transfers, $creditedAccount, $charge->getAccount());
+        $transfer->addAmount($amount);
+
+        $creditedAccountDto->addCharge($amount);
+        $debitedAccountDto->addResource($amount);
+    }
 
     protected function getTransfer(ArrayCollection $transfers, Account $from, Account $to): Transfer
     {
