@@ -5,6 +5,7 @@ namespace App\Service\Transfer;
 use App\DBAL\Types\Bank\ChargeDistributionType;
 use App\Entity\Bank\Account;
 use App\Entity\User;
+use App\Service\Transfer\TransferChargeDistribution\AccountWeakMap;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Service\Transfer\Model\Account as AccountDto;
 use WeakMap;
@@ -37,23 +38,12 @@ class TransferComputer
     {
         $transfers = new ArrayCollection();
 
-        $creditedAccounts = new ArrayCollection();
-        $creditedAccountsDto = new WeakMap();
-        $debitedAccounts = new ArrayCollection();
-        $debitedAccountsDto = new WeakMap();
+        $accountWeakMap = new AccountWeakMap();
 
-        foreach ($accounts as $account) {
-            if ($account->getTotal() > 0) {
-                $creditedAccounts->add($account);
-                $creditedAccountsDto[$account] = $this->createAccountDto($account);
-            } else {
-                $debitedAccounts->add($account);
-                $debitedAccountsDto[$account] = $this->createAccountDto($account);
-            }
-        }
+        $accountWeakMap->setAccounts($accounts);
 
         /** @var Account $debitedAccount */
-        foreach ($debitedAccounts as $debitedAccount) {
+        foreach ($accountWeakMap->getDebitedAccounts() as $debitedAccount) {
             foreach ($debitedAccount->getCharges() as $charge) {
                 $type = null !== $charge->getChargeDistribution()
                     ? $charge->getChargeDistribution()->getType()
@@ -61,17 +51,11 @@ class TransferComputer
 
                 $transferChargeDistribution = $this->getTransferChargeDistribution($type);
 
-                $transferChargeDistribution->setCreditedAccounts($creditedAccounts, $creditedAccountsDto);
-                $transferChargeDistribution->setDebitedAccounts($debitedAccounts, $debitedAccountsDto);
+                $transferChargeDistribution->setAccountWeakMap($accountWeakMap);
                 $transferChargeDistribution->execute($charge, $transfers);
             }
         }
 
         return $transfers;
-    }
-
-    private function createAccountDto(Account $account): AccountDto
-    {
-        return new AccountDto($account->getTotalResources(), $account->getTotalCharges());
     }
 }

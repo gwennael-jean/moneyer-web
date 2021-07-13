@@ -20,19 +20,20 @@ class DefaultTransferChargeDistribution extends TransferChargeDistribution
     {
         $creditedAccount = null;
 
-        $creditedAccountsFiltered = $this->creditedAccounts->filter(function (Account $account, int $id) use ($charge) {
-            $creditedAccountDto = $this->creditedAccountsDto[$account];
-            return $account->getOwner() === $charge->getAccount()->getOwner()
-                && $creditedAccountDto->getTotal() >= $charge->getAmount();
-        });
+        $creditedAccountsFiltered = $this->getAccountWeakMap()->getCreditedAccounts()
+            ->filter(function (Account $account) use ($charge) {
+                $creditedAccountDto = $this->getAccountWeakMap()->getCreditedAccountDto($account);
+                return $account->getOwner() === $charge->getAccount()->getOwner()
+                    && $creditedAccountDto->getTotal() >= $charge->getAmount();
+            });
 
         if (!$creditedAccountsFiltered->isEmpty()) {
             $creditedAccount = $creditedAccountsFiltered->first();
         }
 
         if (null !== $creditedAccount) {
-            $creditedAccountDto = $this->creditedAccountsDto[$creditedAccount];
-            $debitedAccountDto = $this->debitedAccountsDto[$charge->getAccount()];
+            $creditedAccountDto = $this->getAccountWeakMap()->getCreditedAccountDto($creditedAccount);
+            $debitedAccountDto = $this->getAccountWeakMap()->getDebitedAccountDto($charge->getAccount());
 
             $transfer = $this->getTransfer($transfers, $creditedAccount, $charge->getAccount());
             $transfer->addAmount($charge->getAmount());
@@ -40,30 +41,5 @@ class DefaultTransferChargeDistribution extends TransferChargeDistribution
             $creditedAccountDto->addCharge($charge->getAmount());
             $debitedAccountDto->addResource($charge->getAmount());
         }
-    }
-
-    private function getTransfer(ArrayCollection $transfers, Account $from, Account $to): Transfer
-    {
-        $filteredTransfers = $transfers->filter(function (Transfer $transfer) use ($from, $to) {
-            return $transfer->getFrom() === $from && $transfer->getTo() === $to;
-        });
-
-        if ($filteredTransfers->count() === 1) {
-            $transfer = $filteredTransfers->first();
-        } else {
-            $transfer = $this->createTransfer($from, $to);
-            $transfers->add($transfer);
-        }
-
-        return $transfer;
-    }
-
-    private function createTransfer(Account $from, Account $to, float $amount = 0): Transfer
-    {
-        return (new Transfer())
-            ->setUser($from->getOwner())
-            ->setFrom($from)
-            ->setTo($to)
-            ->setAmount($amount);
     }
 }
