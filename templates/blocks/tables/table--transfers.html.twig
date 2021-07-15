@@ -10,9 +10,17 @@
     <tbody>
     {% for transfer in transfers %}
         <tr>
-            <td>{{ transfer.user.fullname }}</td>
-            <td>{{ transfer.from.name }}</td>
-            <td>{{ transfer.to.name }}</td>
+            <td>
+                {{ transfer.user.fullname }}
+            </td>
+            <td>
+                <div>{{ transfer.from.name }}</div>
+                <div class="text-muted">{{ transfer.from.owner.fullname }}</div>
+            </td>
+            <td>
+                <div>{{ transfer.to.name }}</div>
+                <div class="text-muted">{{ transfer.to.owner.fullname }}</div>
+            </td>
             <td>{{ transfer.amount | format_currency('EUR') }}</td>
         </tr>
     {% endfor %}

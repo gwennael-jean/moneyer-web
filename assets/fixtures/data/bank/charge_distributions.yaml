@@ -1,0 +1,7 @@
+---
+
+gwennael.jean@mail.test > Compte commun > Loyer:
+  charge: gwennael.jean@mail.test > Compte commun > Loyer
+  type: FIFTY_FIFTY
+  users:
+    - travis.elliott@mail.test

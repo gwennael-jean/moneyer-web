@@ -39,6 +39,11 @@ class Charge
      */
     private $account;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ChargeDistribution::class, mappedBy="charge", cascade={"persist", "remove"})
+     */
+    private $chargeDistribution;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,5 +100,27 @@ class Charge
     public function __toString(): string
     {
         return sprintf("%s (%s)", $this->getName(), $this->getAmount());
+    }
+
+    public function getChargeDistribution(): ?ChargeDistribution
+    {
+        return $this->chargeDistribution;
+    }
+
+    public function hasChargeDistribution(): bool
+    {
+        return null !== $this->getChargeDistribution();
+    }
+
+    public function setChargeDistribution(ChargeDistribution $chargeDistribution): self
+    {
+        // set the owning side of the relation if necessary
+        if ($chargeDistribution->getCharge() !== $this) {
+            $chargeDistribution->setCharge($this);
+        }
+
+        $this->chargeDistribution = $chargeDistribution;
+
+        return $this;
     }
 }

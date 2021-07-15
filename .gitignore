@@ -13,6 +13,7 @@
 ###< Docker ###
 
 ###> symfony/framework-bundle ###
+/assets/fixtures/data-real/
 /.env.local
 /.env.local.php
 /.env.*.local

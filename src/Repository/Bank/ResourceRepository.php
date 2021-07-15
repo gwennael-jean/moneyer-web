@@ -2,8 +2,11 @@
 
 namespace App\Repository\Bank;
 
+use App\Entity\Bank\Account;
 use App\Entity\Bank\Resource;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,22 +22,20 @@ class ResourceRepository extends ServiceEntityRepository
         parent::__construct($registry, Resource::class);
     }
 
-    // /**
-    //  * @return Resource[] Returns an array of Resource objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Resource[] Returns an array of Resource objects
+     */
+    public function findByUser(User $user)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+        $queryBuilder = $this->createQueryBuilder('r');
+
+        return $queryBuilder
+            ->join('r.account', 'a')
+            ->andWhere('a.owner = :user')
+            ->setParameter('user', $user)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Resource

@@ -2,16 +2,18 @@
 
 namespace App\Service\Transfer\Model;
 
+use App\Entity\Bank\Account as AccountEntity;
+
 class Account
 {
     public float $totalResources;
 
     public float $totalCharges;
 
-    public function __construct(float $totalResources, float $totalCharges)
+    public function __construct(AccountEntity $account)
     {
-        $this->totalResources = $totalResources;
-        $this->totalCharges = $totalCharges;
+        $this->totalResources = $account->getTotalResources();
+        $this->totalCharges = $account->getTotalCharges();
     }
 
     public function getTotal(): float

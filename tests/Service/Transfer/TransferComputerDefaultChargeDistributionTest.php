@@ -2,32 +2,22 @@
 
 namespace App\Tests\Service\Transfer;
 
-use App\Entity\Bank;
-use App\Entity\User;
-use App\Service\Transfer\TransferComputer;
+use App\Service\Transfer\Model\Transfer;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\TestCase;
 
-class TransferComputerTest extends TestCase
+class TransferComputerDefaultChargeDistributionTest extends AbstractChargeDistributionTest
 {
-    private TransferComputer $transferComputer;
-
-    protected function setUp(): void
-    {
-        $this->transferComputer = new TransferComputer();
-    }
-
-    public function testClassicOneTransfer(): void
+    public function testOneTransfer(): void
     {
         $user1 = $this->createUser('user1@mail.test');
 
         $accounts = new ArrayCollection();
 
-        $accounts->add($this->createAccount("Account 01", [
+        $accounts->add($this->createAccount("Account 01", $user1, [
             $this->createResource(2000),
         ]));
 
-        $accounts->add($this->createAccount("Account 02", [
+        $accounts->add($this->createAccount("Account 02", $user1, [
             $this->createCharge(200),
             $this->createCharge(200),
         ]));
@@ -36,6 +26,7 @@ class TransferComputerTest extends TestCase
 
         $this->assertCount(1, $transfers->toArray());
 
+        /** @var Transfer $transfer */
         $transfer = $transfers->get(0);
         $this->assertEquals("user1@mail.test", $transfer->getUser()->getEmail());
         $this->assertEquals("Account 01", $transfer->getFrom()->getName());
@@ -43,21 +34,21 @@ class TransferComputerTest extends TestCase
         $this->assertEquals(400, $transfer->getAmount());
     }
 
-    public function testClassicTwoTransfer(): void
+    public function testMultiTransfer(): void
     {
         $user1 = $this->createUser('user1@mail.test');
 
         $accounts = new ArrayCollection();
 
-        $accounts->add($this->createAccount("Account 01", [
+        $accounts->add($this->createAccount("Account 01", $user1, [
             $this->createResource(2000),
         ]));
 
-        $accounts->add($this->createAccount("Account 02", [
+        $accounts->add($this->createAccount("Account 02", $user1, [
             $this->createResource(500),
         ]));
 
-        $accounts->add($this->createAccount("Account 03", [
+        $accounts->add($this->createAccount("Account 03", $user1, [
             $this->createCharge(1900),
             $this->createCharge(200),
         ]));
@@ -77,37 +68,5 @@ class TransferComputerTest extends TestCase
         $this->assertEquals("Account 02", $transfer->getFrom()->getName());
         $this->assertEquals("Account 03", $transfer->getTo()->getName());
         $this->assertEquals(200, $transfer->getAmount());
-    }
-
-    private function createUser(string $email): User
-    {
-        return (new User())
-            ->setEmail($email);
-    }
-
-    private function createAccount(string $name, array $data): Bank\Account
-    {
-        $account = (new Bank\Account())
-            ->setName($name);
-
-        foreach ($data as $datum) {
-            $datum instanceof Bank\Resource
-                ? $account->addResource($datum)
-                : $account->addCharge($datum);
-        }
-
-        return $account;
-    }
-
-    private function createCharge(float $amount): Bank\Charge
-    {
-        return (new Bank\Charge())
-            ->setAmount($amount);
-    }
-
-    private function createResource(float $amount): Bank\Resource
-    {
-        return (new Bank\Resource())
-            ->setAmount($amount);
     }
 }
