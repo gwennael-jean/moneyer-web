@@ -2,26 +2,12 @@
 
 namespace App\Tests\Service\Transfer;
 
-use App\Entity\Bank;
-use App\Entity\User;
 use App\Service\Transfer\Model\Transfer;
-use App\Service\Transfer\TransferChargeDistribution\DefaultTransferChargeDistribution;
-use App\Service\Transfer\TransferComputer;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\TestCase;
 
-class TransferComputerTest extends TestCase
+class TransferComputerDefaultChargeDistributionTest extends AbstractChargeDistributionTest
 {
-    private TransferComputer $transferComputer;
-
-    protected function setUp(): void
-    {
-        $this->transferComputer = new TransferComputer();
-
-        $this->transferComputer->addTransferChargeDistribution(new DefaultTransferChargeDistribution());
-    }
-
-    public function testClassicOneTransfer(): void
+    public function testOneTransfer(): void
     {
         $user1 = $this->createUser('user1@mail.test');
 
@@ -48,7 +34,7 @@ class TransferComputerTest extends TestCase
         $this->assertEquals(400, $transfer->getAmount());
     }
 
-    public function testClassicTwoTransfer(): void
+    public function testMultiTransfer(): void
     {
         $user1 = $this->createUser('user1@mail.test');
 
@@ -82,38 +68,5 @@ class TransferComputerTest extends TestCase
         $this->assertEquals("Account 02", $transfer->getFrom()->getName());
         $this->assertEquals("Account 03", $transfer->getTo()->getName());
         $this->assertEquals(200, $transfer->getAmount());
-    }
-
-    private function createUser(string $email): User
-    {
-        return (new User())
-            ->setEmail($email);
-    }
-
-    private function createAccount(string $name, User $user, array $data): Bank\Account
-    {
-        $account = (new Bank\Account())
-            ->setName($name)
-            ->setOwner($user);
-
-        foreach ($data as $datum) {
-            $datum instanceof Bank\Resource
-                ? $account->addResource($datum)
-                : $account->addCharge($datum);
-        }
-
-        return $account;
-    }
-
-    private function createCharge(float $amount): Bank\Charge
-    {
-        return (new Bank\Charge())
-            ->setAmount($amount);
-    }
-
-    private function createResource(float $amount): Bank\Resource
-    {
-        return (new Bank\Resource())
-            ->setAmount($amount);
     }
 }

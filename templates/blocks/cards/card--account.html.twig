@@ -66,9 +66,16 @@
     <table class="table table-borderless table-sm table-hover table-py-0">
         {% for charge in account.charges %}
             <tr class="align-middle">
-                <td class="w-100">{{ charge.name }}</td>
-                <td class="text-end">{{ charge.amount | format_currency('EUR') }}</td>
-                <td class="text-center">
+                <td class="w-100">
+                    {{ charge.name }}
+                </td>
+                <td class="text-end">
+                    {{ charge.amount | format_currency('EUR') }}
+                </td>
+                <td class="d-flex">
+                    <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
+                        <i class="{{ ['fas fa-share-alt'] | merge(charge.hasChargeDistribution ? [] : ['text-muted']) | join(' ') }}"></i>
+                    </a>
                     <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>

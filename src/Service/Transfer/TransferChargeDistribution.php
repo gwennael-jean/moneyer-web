@@ -69,8 +69,10 @@ abstract class TransferChargeDistribution
         $creditedAccountDto = $this->getAccountWeakMap()->getCreditedAccountDto($creditedAccount);
         $debitedAccountDto = $this->getAccountWeakMap()->getDebitedAccountDto($charge->getAccount());
 
-        $transfer = $this->getTransfer($transfers, $creditedAccount, $charge->getAccount());
-        $transfer->addAmount($amount);
+        if ($creditedAccount !== $charge->getAccount()) {
+            $transfer = $this->getTransfer($transfers, $creditedAccount, $charge->getAccount());
+            $transfer->addAmount($amount);
+        }
 
         $creditedAccountDto->addCharge($amount);
         $debitedAccountDto->addResource($amount);

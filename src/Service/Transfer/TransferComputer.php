@@ -22,9 +22,11 @@ class TransferComputer
         return $this->transferChargeDistributions->get($type);
     }
 
-    public function addTransferChargeDistribution(TransferChargeDistribution $transferChargeDistribution): void
+    public function addTransferChargeDistribution(TransferChargeDistribution $transferChargeDistribution): self
     {
         $this->transferChargeDistributions->set($transferChargeDistribution->getType(), $transferChargeDistribution);
+
+        return $this;
     }
 
     /**
@@ -40,9 +42,9 @@ class TransferComputer
 
         $accountWeakMap->setAccounts($accounts);
 
-        /** @var Account $debitedAccount */
-        foreach ($accountWeakMap->getDebitedAccounts() as $debitedAccount) {
-            foreach ($debitedAccount->getCharges() as $charge) {
+        /** @var Account $account */
+        foreach ($accountWeakMap->getAccounts() as $account) {
+            foreach ($account->getCharges() as $charge) {
                 $type = null !== $charge->getChargeDistribution()
                     ? $charge->getChargeDistribution()->getType()
                     : ChargeDistributionType::VIEW;

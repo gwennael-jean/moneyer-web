@@ -107,6 +107,11 @@ class Charge
         return $this->chargeDistribution;
     }
 
+    public function hasChargeDistribution(): bool
+    {
+        return null !== $this->getChargeDistribution();
+    }
+
     public function setChargeDistribution(ChargeDistribution $chargeDistribution): self
     {
         // set the owning side of the relation if necessary

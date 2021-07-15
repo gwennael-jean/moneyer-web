@@ -79,6 +79,13 @@ class ChargeDistribution
         return $this->users;
     }
 
+    public function setUsers(ArrayCollection $users): self
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {

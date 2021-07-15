@@ -11,18 +11,23 @@ class AccountWeakMap
 {
     private ArrayCollection $creditedAccounts;
 
-    private WeakMap $creditedAccountsDto;
-
     private ArrayCollection $debitedAccounts;
 
-    private WeakMap $debitedAccountsDto;
+    private WeakMap $accountsDto;
 
     public function __construct()
     {
         $this->creditedAccounts = new ArrayCollection();
-        $this->creditedAccountsDto = new WeakMap();
         $this->debitedAccounts = new ArrayCollection();
-        $this->debitedAccountsDto = new WeakMap();
+        $this->accountsDto = new WeakMap();
+    }
+
+    public function getAccounts(): ArrayCollection
+    {
+        return new ArrayCollection(array_merge(
+            $this->getCreditedAccounts()->toArray(),
+            $this->getDebitedAccounts()->toArray(),
+        ));
     }
 
     public function setAccounts(ArrayCollection $accounts): self
@@ -63,7 +68,7 @@ class AccountWeakMap
     {
         if (!$this->creditedAccounts->contains($account)) {
             $this->creditedAccounts->add($account);
-            $this->creditedAccountsDto[$account] = new AccountDto($account);
+            $this->accountsDto[$account] = new AccountDto($account);
         }
 
         return $this;
@@ -71,8 +76,8 @@ class AccountWeakMap
 
     public function getCreditedAccountDto(Account $account): ?AccountDto
     {
-        return isset($this->creditedAccountsDto[$account])
-            ? $this->creditedAccountsDto[$account]
+        return isset($this->accountsDto[$account])
+            ? $this->accountsDto[$account]
             : null;
     }
 
@@ -94,7 +99,7 @@ class AccountWeakMap
     {
         if (!$this->debitedAccounts->contains($account)) {
             $this->debitedAccounts->add($account);
-            $this->debitedAccountsDto[$account] = new AccountDto($account);
+            $this->accountsDto[$account] = new AccountDto($account);
         }
 
         return $this;
@@ -102,8 +107,8 @@ class AccountWeakMap
 
     public function getDebitedAccountDto(Account $account): ?AccountDto
     {
-        return isset($this->debitedAccountsDto[$account])
-            ? $this->debitedAccountsDto[$account]
+        return isset($this->accountsDto[$account])
+            ? $this->accountsDto[$account]
             : null;
     }
 }
