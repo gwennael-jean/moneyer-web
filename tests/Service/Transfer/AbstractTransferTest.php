@@ -16,7 +16,7 @@ use App\Service\Transfer\TransferComputer;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractChargeDistributionTest extends TestCase
+abstract class AbstractTransferTest extends TestCase
 {
     protected AccountRepository $accountRepositoryMock;
 
@@ -53,7 +53,7 @@ abstract class AbstractChargeDistributionTest extends TestCase
             ->setEmail($email);
     }
 
-    protected function createAccount(string $name, User $user, array $data): Bank\Account
+    protected function createAccount(string $name, User $user, array $data = []): Bank\Account
     {
         $account = (new Bank\Account())
             ->setName($name)
