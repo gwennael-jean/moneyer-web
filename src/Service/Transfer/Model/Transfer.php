@@ -23,6 +23,7 @@ class Transfer
     public function setUser(User $user): Transfer
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -34,6 +35,7 @@ class Transfer
     public function setFrom(Account $from): Transfer
     {
         $this->from = $from;
+
         return $this;
     }
 
@@ -45,6 +47,7 @@ class Transfer
     public function setTo(Account $to): Transfer
     {
         $this->to = $to;
+
         return $this;
     }
 
@@ -56,12 +59,21 @@ class Transfer
     public function setAmount(float $amount): Transfer
     {
         $this->amount = $amount;
+
         return $this;
     }
 
     public function addAmount(float $amount): Transfer
     {
         $this->amount += $amount;
+
+        return $this;
+    }
+
+    public function subAmount(float $amount): Transfer
+    {
+        $this->amount -= $amount;
+
         return $this;
     }
 }

@@ -5,7 +5,7 @@ namespace App\Tests\Service\Transfer;
 use App\DBAL\Types\Bank\ChargeDistributionType;
 use App\Service\Transfer\Model\Transfer;
 
-class TransferComputerResourcePercentChargeDistributionTest extends AbstractChargeDistributionTest
+class TransferComputerResourcePercentTransferTest extends AbstractTransferTest
 {
     public function testOneCharge(): void
     {

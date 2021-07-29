@@ -5,7 +5,7 @@ namespace App\Tests\Service\Transfer;
 use App\Service\Transfer\Model\Transfer;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class TransferComputerDefaultChargeDistributionTest extends AbstractChargeDistributionTest
+class TransferComputerDefaultTransferTest extends AbstractTransferTest
 {
     public function testOneTransfer(): void
     {
