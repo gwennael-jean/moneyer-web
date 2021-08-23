@@ -30,23 +30,11 @@ class AccountRepository extends ServiceEntityRepository
 
         return $queryBuilder
             ->leftJoin('a.accountShares', 's')
-            ->andWhere('a.owner = :user OR s.user = :user')
+            ->andWhere('a.createdBy = :user OR a.owner = :user OR s.user = :user')
             ->setParameter('user', $user)
             ->orderBy("IF(a.owner = :user, 1, 0)", Criteria::DESC)
             ->addOrderBy("a.id")
             ->getQuery()
             ->getResult();
     }
-
-    /*
-    public function findOneBySomeField($value): ?Account
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

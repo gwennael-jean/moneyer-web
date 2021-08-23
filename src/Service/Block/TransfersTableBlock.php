@@ -2,8 +2,7 @@
 
 namespace App\Service\Block;
 
-use App\Entity\Bank\Account;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Service\Transfer\Model\TransferCollection;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\BlockServiceInterface;
 use Sonata\BlockBundle\Model\BlockInterface;
@@ -45,7 +44,7 @@ class TransfersTableBlock implements BlockServiceInterface
         ]);
 
         $resolver->setRequired('transfers');
-        $resolver->setAllowedTypes('transfers', ArrayCollection::class);
+        $resolver->setAllowedTypes('transfers', TransferCollection::class);
     }
 
 }

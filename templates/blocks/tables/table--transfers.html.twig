@@ -1,7 +1,6 @@
 <table class="table">
     <thead>
     <tr>
-        <th>{% trans %}User{% endtrans %}</th>
         <th>{% trans %}Account from{% endtrans %}</th>
         <th>{% trans %}Account to{% endtrans %}</th>
         <th>{% trans %}Amount{% endtrans %}</th>
@@ -11,15 +10,14 @@
     {% for transfer in transfers %}
         <tr>
             <td>
-                {{ transfer.user.fullname }}
-            </td>
-            <td>
                 <div>{{ transfer.from.name }}</div>
                 <div class="text-muted">{{ transfer.from.owner.fullname }}</div>
             </td>
             <td>
                 <div>{{ transfer.to.name }}</div>
-                <div class="text-muted">{{ transfer.to.owner.fullname }}</div>
+                {% if transfer.to.owner is not null %}
+                    <div class="text-muted">{{ transfer.to.owner.fullname }}</div>
+                {% endif %}
             </td>
             <td>{{ transfer.amount | format_currency('EUR') }}</td>
         </tr>

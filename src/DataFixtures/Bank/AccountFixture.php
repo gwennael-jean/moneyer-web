@@ -17,7 +17,11 @@ class AccountFixture extends AbstractFixture implements DependentFixtureInterfac
         foreach ($this->getData() as $key => $data) {
             $entity = (new Account())
                 ->setName($data['name'])
-                ->setOwner($this->getReferenceEntity(UserFixture::PREFIX_REFERENCE, $data['owner']));
+                ->setCreatedBy($this->getReferenceEntity(UserFixture::PREFIX_REFERENCE, $data['createdBy']));
+
+            if (isset($data['owner']) && null !== $data['owner']) {
+                $entity->setOwner($this->getReferenceEntity(UserFixture::PREFIX_REFERENCE, $data['owner']));
+            }
 
             $this->addReference($this->getReferencePath(self::PREFIX_REFERENCE, $key), $entity);
 

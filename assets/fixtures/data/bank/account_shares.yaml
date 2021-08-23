@@ -1,16 +1,16 @@
 ---
 
-travis.elliott@mail.test > Compte Travis > gwennael.jean@mail.test:
-  account: travis.elliott@mail.test > Compte Travis
+laura.lematelot@mail.test > Compte personnel > gwennael.jean@mail.test:
+  account: laura.lematelot@mail.test > Compte personnel
   user: gwennael.jean@mail.test
   type: EDIT
 
-gwennael.jean@mail.test > Compte personnel > travis.elliott@mail.test:
+gwennael.jean@mail.test > Compte personnel > laura.lematelot@mail.test:
   account: gwennael.jean@mail.test > Compte personnel
-  user: travis.elliott@mail.test
+  user: laura.lematelot@mail.test
   type: EDIT
 
-gwennael.jean@mail.test > Compte personnel > rafael.phillips@mail.test:
-  account: gwennael.jean@mail.test > Compte personnel
-  user: rafael.phillips@mail.test
-  type: VIEW
+gwennael.jean@mail.test > Compte commun > laura.lematelot@mail.test:
+  account: gwennael.jean@mail.test > Compte commun
+  user: laura.lematelot@mail.test
+  type: EDIT

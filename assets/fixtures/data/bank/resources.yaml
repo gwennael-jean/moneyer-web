@@ -5,7 +5,7 @@ gwennael.jean@mail.test > Compte personnel > Salaire:
   account: gwennael.jean@mail.test > Compte personnel
   amount: 2000
 
-travis.elliott@mail.test > Compte Travis > Salaire:
+laura.lematelot@mail.test > Compte personnel > Salaire:
   name: Salaire
-  account: travis.elliott@mail.test > Compte Travis
+  account: laura.lematelot@mail.test > Compte personnel
   amount: 1500

@@ -34,13 +34,18 @@ class AccountVoter extends Voter
         }
 
         switch ($attribute) {
-            case self::VIEW: return $this->isOwner($subject, $user) || $this->canView($subject, $user);
-            case self::EDIT: return $this->isOwner($subject, $user) || $this->canEdit($subject, $user);
+            case self::VIEW: return $this->isCreatedBy($subject, $user) || $this->isOwner($subject, $user) || $this->canView($subject, $user);
+            case self::EDIT: return $this->isCreatedBy($subject, $user) || $this->isOwner($subject, $user) || $this->canEdit($subject, $user);
             case self::SHARE:
-            case self::DELETE: return $this->isOwner($subject, $user);
+            case self::DELETE: return $this->isCreatedBy($subject, $user) || $this->isOwner($subject, $user);
         }
 
         return false;
+    }
+
+    private function isCreatedBy(Account $account, User $user): bool
+    {
+        return null === $account->getId() || $account->getCreatedBy() === $user;
     }
 
     private function isOwner(Account $account, User $user): bool

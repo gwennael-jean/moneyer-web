@@ -7,10 +7,10 @@ gwennael.jean@mail.test:
     password: azerty
     is_admin: true
 
-travis.elliott@mail.test:
-    firstname: Travis
-    lastname: Elliott
-    email: travis.elliott@mail.test
+laura.lematelot@mail.test:
+    firstname: Laura
+    lastname: Lematelot
+    email: laura.lematelot@mail.test
     password: azerty
 
 rafael.phillips@mail.test:

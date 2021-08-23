@@ -3,7 +3,6 @@
 namespace App;
 
 use App\DependencyInjection\Compiler\Bank\TransferChargeDistributionCompilerPass;
-use App\DependencyInjection\Compiler\Bank\TransferSimplifierTypeCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -17,8 +16,7 @@ class Kernel extends BaseKernel
     protected function build(ContainerBuilder $container)
     {
         $container
-            ->addCompilerPass(new TransferChargeDistributionCompilerPass())
-            ->addCompilerPass(new TransferSimplifierTypeCompilerPass());
+            ->addCompilerPass(new TransferChargeDistributionCompilerPass());
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
