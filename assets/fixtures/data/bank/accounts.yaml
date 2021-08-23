@@ -2,17 +2,20 @@
 
 gwennael.jean@mail.test > Compte personnel:
   name: Compte personnel
+  createdBy: gwennael.jean@mail.test
   owner: gwennael.jean@mail.test
 
 gwennael.jean@mail.test > Compte commun:
   name: Compte commun
-  owner: gwennael.jean@mail.test
+  createdBy: gwennael.jean@mail.test
+  owner: ~
 
-travis.elliott@mail.test > Compte Travis:
-  name: Compte Travis
-  owner: travis.elliott@mail.test
+laura.lematelot@mail.test > Compte personnel:
+  name: Compte personnel
+  createdBy: laura.lematelot@mail.test
+  owner: laura.lematelot@mail.test
 
-rafael:
-  phillips:@mail.test > Compte Rafael:
-  name: Compte Rafael
+rafael.phillips:@mail.test > Compte Rafael:
+  name: Compte personnel
+  createdBy: rafael.phillips@mail.test
   owner: rafael.phillips@mail.test
