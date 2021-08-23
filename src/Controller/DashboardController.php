@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Service\Provider\Bank\AccountProvider;
 use App\Service\Transfer\TransferComputer;
-use App\Service\Transfer\TransferSimplifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,8 +13,7 @@ class DashboardController extends AbstractController
 {
     public function __construct(
         private AccountProvider $accountProvider,
-        private TransferComputer $transferComputer,
-        private TransferSimplifier $transferSimplifier,
+        private TransferComputer $transferComputer
     )
     {
     }
@@ -31,11 +29,11 @@ class DashboardController extends AbstractController
 
         $accounts = $this->accountProvider->getByUser($user);
 
-        $transfers = $this->transferComputer->computeByUser($user, $accounts);
+        $transfers = $this->transferComputer->compute($accounts);
 
         return $this->render('pages/dashboard/index.html.twig', [
             'accounts' => $accounts,
-            'transfers' => $this->transferSimplifier->simplify($transfers),
+            'transfers' => $transfers,
         ]);
     }
 }
