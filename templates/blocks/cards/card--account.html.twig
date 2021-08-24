@@ -73,7 +73,7 @@
                     {{ charge.amount | format_currency('EUR') }}
                 </td>
                 <td class="d-flex">
-                    <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
+                    <a class="btn" href="{{ path('bank_charge_distribution_index', { account: account.id, charge: charge.id }) }}">
                         <i class="{{ ['fas fa-share-alt'] | merge(charge.hasChargeDistribution ? [] : ['text-muted']) | join(' ') }}"></i>
                     </a>
                     <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
