@@ -22,3 +22,9 @@ services:
     arguments: ['@twig']
     tags:
       - { name: sonata.block }
+
+  app.block.table.livingWage:
+    class: App\Service\Block\LivingWageTableBlock
+    arguments: ['@twig']
+    tags:
+      - { name: sonata.block }
