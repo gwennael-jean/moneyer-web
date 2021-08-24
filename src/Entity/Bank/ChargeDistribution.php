@@ -22,7 +22,7 @@ class ChargeDistribution
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=Charge::class, inversedBy="chargeDistribution", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Charge::class, inversedBy="chargeDistribution", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $charge;
