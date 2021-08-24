@@ -16,6 +16,6 @@ class DefaultTransferChargeDistribution extends TransferChargeDistribution
 
     public function execute(TransferCollection $transfers, Charge $charge): void
     {
-        $transfers->getAccountBalances()->remove($charge->getAccount(), -$charge->getAmount());
+        $transfers->getAccountBalances()->remove($charge->getAccount(), $charge->getAmount());
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\Provider\Bank\AccountProvider;
+use App\Service\Transfer\LivingWageComputer;
 use App\Service\Transfer\TransferComputer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,8 @@ class DashboardController extends AbstractController
 {
     public function __construct(
         private AccountProvider $accountProvider,
-        private TransferComputer $transferComputer
+        private TransferComputer $transferComputer,
+        private LivingWageComputer $livingWageComputer,
     )
     {
     }
@@ -34,6 +36,7 @@ class DashboardController extends AbstractController
         return $this->render('pages/dashboard/index.html.twig', [
             'accounts' => $accounts,
             'transfers' => $transfers,
+            'livingWage' => $this->livingWageComputer->compute($transfers),
         ]);
     }
 }
