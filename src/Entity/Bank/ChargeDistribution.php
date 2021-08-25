@@ -34,6 +34,7 @@ class ChargeDistribution
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
+     * @ORM\JoinTable(name="bank_charge_distribution_user")
      */
     private $users;
 
