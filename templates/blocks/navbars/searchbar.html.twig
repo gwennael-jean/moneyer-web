@@ -14,7 +14,10 @@
         <ul class="navbar-nav">
             {% for action in actions %}
                 <li class="nav-item">
-                    <a class="btn btn-outline-primary" aria-current="page" href="{{ path(action.route) }}">
+                    <a class="btn btn-outline-primary"
+                       aria-current="page"
+                       href="{{ path(action.route) }}"
+                       {% if action.modal is defined %}data-action="app#openModal" data-title="{{ action.modal | trans }}"{% endif %}>
                         <i class="fas {{ action.icon }}"></i>
                         {{ action.text | trans }}
                     </a>

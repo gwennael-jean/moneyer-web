@@ -1,18 +1,35 @@
-{% extends 'base-connected.html.twig' %}
+{% extends app.request.isXmlHttpRequest ? 'base-connected-ajax-card.html.twig' : 'base-connected.html.twig' %}
 
 {% block title %}{% trans %}Update account{% endtrans %}{{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="mb-3">
+
             <h1>{% trans %}Update account{% endtrans %}</h1>
+
             {{ form_start(form) }}
             {{ form_rest(form) }}
+
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i>
                 {% trans %}Save{% endtrans %}
             </button>
+
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block ajax_card_body %}
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block ajax_card_footer %}
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i>
+        {% trans %}Save{% endtrans %}
+    </button>
 {% endblock %}

@@ -49,7 +49,7 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/charge/add', name: 'bank_account_add')]
+    #[Route('/account/add', name: 'bank_account_add')]
     #[Route('/account/{account}/update', name: 'bank_account_update')]
     public function update(Request $request, ?Account $account): Response
     {
@@ -133,6 +133,22 @@ class AccountController extends AbstractController
 
         return $this->render("pages/bank/account/unshare.html.twig", [
             'accountShare' => $accountShare
+        ]);
+    }
+
+    #[Route('/account/{account}/delete', name: 'bank_account_delete')]
+    public function delete(Request $request, Account $account)
+    {
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $this->getDoctrine()->getManager()->remove($account);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', "Account deleted successfully.");
+            return $this->redirectToRoute('bank_account_list');
+        }
+
+        return $this->render("pages/bank/account/delete.html.twig", [
+            'account' => $account
         ]);
     }
 }
