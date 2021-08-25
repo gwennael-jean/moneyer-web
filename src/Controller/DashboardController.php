@@ -31,7 +31,7 @@ class DashboardController extends AbstractController
 
         $accounts = $this->accountProvider->getByUser($user);
 
-        $transfers = $this->transferComputer->compute($accounts);
+        $transfers = $this->transferComputer->compute($accounts, $user);
 
         return $this->render('pages/dashboard/index.html.twig', [
             'accounts' => $accounts,

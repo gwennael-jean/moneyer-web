@@ -64,7 +64,7 @@
 
 {% block body %}
     <table class="table table-borderless table-sm table-hover table-py-0">
-        {% for charge in account.charges %}
+        {% for charge in account.charges(app.user) %}
             <tr class="align-middle">
                 <td class="w-100">
                     {{ charge.name }}
@@ -88,6 +88,6 @@
 {% block footer %}
     <div class="d-flex align-items-center">
         <div class="flex-fill">Total</div>
-        <div class="text-end ps-1">{{ account.total | format_currency('EUR') }}</div>
+        <div class="text-end ps-1">{{ account.total(app.user) | format_currency('EUR') }}</div>
     </div>
 {% endblock %}

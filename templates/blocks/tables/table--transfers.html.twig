@@ -10,8 +10,12 @@
     {% for transfer in transfers %}
         <tr>
             <td>
+                {% if transfer.fromType == "Account" %}
                 <div>{{ transfer.from.name }}</div>
                 <div class="text-muted">{{ transfer.from.owner.fullname }}</div>
+                {% else %}
+                    <div>{{ transfer.from.fullname }}</div>
+                {% endif %}
             </td>
             <td>
                 <div>{{ transfer.to.name }}</div>

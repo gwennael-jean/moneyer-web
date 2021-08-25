@@ -13,6 +13,11 @@
                             <tr>
                                 <td>{{ accountShare.user.fullname }}</td>
                                 <td>{{ accountShare.type | readable_enum | trans }}</td>
+                                <td>
+                                    <a href="{{ path('bank_account_unshare', { accountShare: accountShare.id }) }}">
+                                        {% trans %}Remove{% endtrans %}
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </table>

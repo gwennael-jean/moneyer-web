@@ -30,12 +30,12 @@ class TransferComputer
         return $this;
     }
 
-    public function compute(ArrayCollection $accounts): TransferCollection
+    public function compute(ArrayCollection $accounts, ?User $user = null): TransferCollection
     {
         $transfers = new TransferCollection($accounts);
 
         foreach ($accounts as $account) {
-            foreach ($account->getCharges() as $charge) {
+            foreach ($account->getCharges($user) as $charge) {
                 $type = null !== $charge->getChargeDistribution()
                     ? $charge->getChargeDistribution()->getType()
                     : ChargeDistributionType::VIEW;
@@ -67,10 +67,13 @@ class TransferComputer
                         ? $transfers->getPot()->get($userPayer)
                         : abs($transfers->getPot()->get($userReceiver));
 
-                    $transfer = new Transfer($accountToPay, $accountToReceive, $amount);
+                    $transfer = new Transfer($accountToPay ?? $userPayer, $accountToReceive, $amount);
                     $transfers->add($transfer);
 
-                    $transfers->getAccountBalances()->remove($accountToPay, $amount);
+                    if (null !== $accountToPay) {
+                        $transfers->getAccountBalances()->remove($accountToPay, $amount);
+                    }
+
                     $transfers->getPot()->remove($userPayer, $amount);
 
                     $transfers->getAccountBalances()->add($accountToReceive, $amount);
@@ -113,7 +116,7 @@ class TransferComputer
         return null;
     }
 
-    private function getAccountToPay(ArrayCollection $accounts, User $user): Account
+    private function getAccountToPay(ArrayCollection $accounts, User $user): ?Account
     {
         $userAccounts = $accounts->filter(function (Account $account) use ($user) {
             return $account->getOwner() === $user;

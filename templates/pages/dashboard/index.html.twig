@@ -4,6 +4,7 @@
 
 {% block body %}
     <div class="mb-3">
+
         <h1>{% trans %}Resources{% endtrans %}</h1>
 
         <div class="row">
@@ -30,6 +31,7 @@
     </div>
 
     <h1>{% trans %}Charges{% endtrans %}</h1>
+
     <div class="row">
         {% for account in accounts %}
             {% if is_granted('view', account) %}
@@ -61,6 +63,5 @@
             }) }}
         </div>
     </div>
-
 
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base-connected.html.twig' %}
+
+{% block title %}{% trans %}Delete account share{% endtrans %}{{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-3">
+            <h1>{% trans %}Delete account share{% endtrans %}</h1>
+            <p>
+                {% trans %}Delete account share confirmation message.{% endtrans %}
+            </p>
+            <form method="post">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    {% trans %}Confirm{% endtrans %}
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
