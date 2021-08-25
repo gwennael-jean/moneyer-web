@@ -3,16 +3,17 @@
 namespace App\Service\Transfer\Model;
 
 use App\Entity\Bank\Account;
+use App\Entity\User;
 
 class Transfer
 {
-    private Account $from;
+    private Account|User $from;
 
     private Account $to;
 
     private float $amount;
 
-    public function __construct(Account $from, Account $to, float $amount = 0)
+    public function __construct(Account|User $from, Account $to, float $amount = 0)
     {
         $this->from = $from;
         $this->to = $to;
@@ -20,18 +21,26 @@ class Transfer
     }
 
     /**
-     * @return Account
+     * @return string
      */
-    public function getFrom(): Account
+    public function getFromType(): string
+    {
+        return $this->from instanceof Account ? "Account" : "User";
+    }
+
+    /**
+     * @return Account|User
+     */
+    public function getFrom(): Account|User
     {
         return $this->from;
     }
 
     /**
-     * @param Account $from
+     * @param Account|User $from
      * @return Transfer
      */
-    public function setFrom(Account $from): Transfer
+    public function setFrom(Account|User $from): Transfer
     {
         $this->from = $from;
         return $this;

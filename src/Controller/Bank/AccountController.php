@@ -4,6 +4,7 @@ namespace App\Controller\Bank;
 
 use App\Entity\Bank\Account;
 use App\Entity\Bank\AccountShare;
+use App\Entity\User;
 use App\Form\Bank\AccountShareType;
 use App\Form\Bank\AccountType;
 use App\Security\Voter\Bank\AccountVoter;
@@ -63,6 +64,35 @@ class AccountController extends AbstractController
         return $this->render('pages/bank/account/share.html.twig', [
             'account' => $account,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/account/{accountShare}', name: 'bank_account_unshare')]
+    public function unshare(Request $request, AccountShare $accountShare): Response
+    {
+        if ($request->isMethod(Request::METHOD_POST)) {
+
+            foreach ($accountShare->getAccount()->getCharges() as $charge) {
+                if ($charge->hasChargeDistribution()) {
+                    $charge->getChargeDistribution()->removeUser($accountShare->getUser());
+
+                    $charge->getChargeDistribution()->getUsers()->count() > 1
+                        ? $this->getDoctrine()->getManager()->persist($charge->getChargeDistribution())
+                        : $this->getDoctrine()->getManager()->remove($charge->getChargeDistribution());
+
+                    $this->getDoctrine()->getManager()->remove($accountShare);
+                }
+            }
+
+            $this->getDoctrine()->getManager()->remove($accountShare);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', "Account share deleted successfully.");
+            return $this->redirectToRoute('dashboard');
+        }
+
+        return $this->render("pages/bank/account/unshare.html.twig", [
+            'accountShare' => $accountShare
         ]);
     }
 }

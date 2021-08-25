@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\Bank\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -139,8 +140,16 @@ class Account
     /**
      * @return Collection|Charge[]
      */
-    public function getCharges(): Collection
+    public function getCharges(?User $user = null): Collection
     {
+        if (null !== $user) {
+            return $this->charges->filter(function (Charge $charge) use ($user) {
+                return $charge->getAccount()->getCreatedBy() === $user
+                    || $charge->getAccount()->getOwner() === $user
+                    || (null !== $charge->getChargeDistribution() && $charge->getChargeDistribution()->getUsers()->contains($user));
+            });
+        }
+
         return $this->charges;
     }
 
@@ -182,20 +191,20 @@ class Account
         return $total;
     }
 
-    public function getTotalCharges(): float
+    public function getTotalCharges(?User $user = null): float
     {
         $total = 0;
 
-        foreach ($this->getCharges() as $charge) {
+        foreach ($this->getCharges($user) as $charge) {
             $total += $charge->getAmount();
         }
 
         return $total;
     }
 
-    public function getTotal(): float
+    public function getTotal(?User $user = null): float
     {
-        return $this->getTotalResources() - $this->getTotalCharges();
+        return $this->getTotalResources() - $this->getTotalCharges($user);
     }
 
     public function __toString(): string
