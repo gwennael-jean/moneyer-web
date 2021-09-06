@@ -20,7 +20,8 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.scss) if your JavaScript imports CSS.
      */
-    .addEntry('app', './assets/app.js')
+    .addStyleEntry('app', './assets/styles/app.scss')
+    .addEntry('dashboard', './assets/dashboard.js')
     .enableVueLoader(() => {}, {
         version: 3
     })
