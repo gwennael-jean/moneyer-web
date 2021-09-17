@@ -4,6 +4,7 @@ namespace App\Entity\Bank;
 
 use App\Repository\Bank\ResourceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=ResourceRepository::class)
@@ -16,21 +17,25 @@ class Resource
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Serializer\Groups(["account:list"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
+    #[Serializer\Groups(["account:list"])]
     private $name;
 
     /**
      * @ORM\Column(type="float")
      */
+    #[Serializer\Groups(["account:list"])]
     private $amount;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
+    #[Serializer\Groups(["account:list"])]
     private $date;
 
     /**

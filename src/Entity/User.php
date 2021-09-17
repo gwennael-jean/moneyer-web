@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -23,25 +23,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups("user:read")]
+    #[Serializer\Groups(["user:read"])]
     private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    #[Groups("user:read")]
+    #[Serializer\Groups(["user:read"])]
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
-    #[Groups("user:read")]
+    #[Serializer\Groups(["user:read"])]
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    #[Groups("user:read")]
+    #[Serializer\Groups(["user:read"])]
     private string $email;
 
     /**

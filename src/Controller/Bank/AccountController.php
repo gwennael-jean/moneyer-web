@@ -4,10 +4,10 @@ namespace App\Controller\Bank;
 
 use App\Entity\Bank\Account;
 use App\Entity\Bank\AccountShare;
-use App\Entity\User;
 use App\Form\Bank\AccountShareType;
 use App\Form\Bank\AccountType;
 use App\Security\Voter\Bank\AccountVoter;
+use App\Service\Provider\Bank\AccountProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +15,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccountController extends AbstractController
 {
+    public function __construct(
+        private AccountProvider $accountProvider,
+    )
+    {
+    }
+
+    #[Route('/accounts', name: 'bank_accounts')]
+    public function list(Request $request): Response
+    {
+        $accounts = $this->accountProvider->getByUser($this->getUser());
+
+        return $this->json($accounts, 200, [], [
+            'groups' => ['account:list', 'user:read']
+        ]);
+    }
+
     #[Route('/account/{account}/update', name: 'bank_account_update')]
     public function update(Request $request, Account $account): Response
     {
@@ -39,7 +55,6 @@ class AccountController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 
     #[Route('/account/{account}/share', name: 'bank_account_share')]
     public function share(Request $request, Account $account): Response

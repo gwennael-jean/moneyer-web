@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}
-    {{ sonata_block_render({ type: 'app.block.topbar' }) }}
-    <div class="container-with-topbar">
-        {{ sonata_block_render({ type: 'app.block.flash' }) }}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('dashboard') }}
 {% endblock %}
 
-{% block footer %}
-    </div>
+{% block javascripts %}
+    {{ encore_entry_script_tags('dashboard') }}
 {% endblock %}

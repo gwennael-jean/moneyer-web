@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\Bank\AccountShareRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=AccountShareRepository::class)
@@ -23,6 +24,7 @@ class AccountShare
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Serializer\Groups(["account:list"])]
     private $id;
 
     /**
@@ -35,11 +37,13 @@ class AccountShare
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="accountShares", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Serializer\Groups(["account:list"])]
     private $user;
 
     /**
      * @ORM\Column(type="AccountShareType")
      */
+    #[Serializer\Groups(["account:list"])]
     private $type;
 
     public function getId(): ?int

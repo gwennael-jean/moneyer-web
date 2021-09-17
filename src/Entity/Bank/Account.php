@@ -6,8 +6,8 @@ use App\Entity\User;
 use App\Repository\Bank\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
@@ -20,38 +20,45 @@ class Account
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Serializer\Groups(["account:list"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
+    #[Serializer\Groups(["account:list"])]
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Serializer\Groups(["account:list"])]
     private $createdBy;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=true)
      */
+    #[Serializer\Groups(["account:list"])]
     private $owner;
 
     /**
      * @ORM\OneToMany(targetEntity=Resource::class, mappedBy="account", orphanRemoval=true, cascade={"persist", "remove"})
      */
+    #[Serializer\Groups(["account:list"])]
     private $resources;
 
     /**
      * @ORM\OneToMany(targetEntity=Charge::class, mappedBy="account", orphanRemoval=true, cascade={"persist", "remove"})
      */
+    #[Serializer\Groups(["account:list"])]
     private $charges;
 
     /**
      * @ORM\OneToMany(targetEntity=AccountShare::class, mappedBy="account", orphanRemoval=true)
      */
+    #[Serializer\Groups(["account:list"])]
     private $accountShares;
 
     public function __construct()

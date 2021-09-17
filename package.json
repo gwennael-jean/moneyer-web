@@ -21,11 +21,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@element-plus/icons": "0.0.11",
         "@fortawesome/fontawesome-free": "^5.15.3",
         "@popperjs/core": "^2.9.2",
         "axios": "^0.21.4",
         "bootstrap": "^5.0.2",
         "element-plus": "^1.1.0-beta.9",
-        "vue-axios": "^3.2.5"
+        "vue-axios": "^3.2.5",
+        "vuex": "^4.0.2"
     }
 }

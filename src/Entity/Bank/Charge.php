@@ -4,6 +4,7 @@ namespace App\Entity\Bank;
 
 use App\Repository\Bank\ChargeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=ChargeRepository::class)
@@ -16,21 +17,25 @@ class Charge
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Serializer\Groups(["account:list"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
+    #[Serializer\Groups(["account:list"])]
     private $name;
 
     /**
      * @ORM\Column(type="float")
      */
+    #[Serializer\Groups(["account:list"])]
     private $amount;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
+    #[Serializer\Groups(["account:list"])]
     private $date;
 
     /**
@@ -42,6 +47,7 @@ class Charge
     /**
      * @ORM\OneToOne(targetEntity=ChargeDistribution::class, mappedBy="charge", cascade={"persist", "remove"})
      */
+    #[Serializer\Groups(["account:list"])]
     private $chargeDistribution;
 
     public function getId(): ?int
