@@ -4,7 +4,6 @@ namespace App\Controller\Bank;
 
 use App\Entity\Bank\Account;
 use App\Entity\Bank\AccountShare;
-use App\Entity\User;
 use App\Form\Bank\AccountShareType;
 use App\Form\Bank\AccountType;
 use App\Security\Voter\Bank\AccountVoter;
@@ -15,6 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccountController extends AbstractController
 {
+    #[Route('/accounts', name: 'bank_account_list')]
+    public function list(Request $request): Response
+    {
+
+    }
+
     #[Route('/account/{account}/update', name: 'bank_account_update')]
     public function update(Request $request, Account $account): Response
     {

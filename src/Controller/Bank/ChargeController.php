@@ -12,6 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChargeController extends AbstractController
 {
+    #[Route('/charges', name: 'bank_charge_list')]
+    public function list(Request $request): Response
+    {
+
+    }
+
     #[Route('/bank/account/{account}/charge/add', name: 'bank_charge_add')]
     #[Route('/bank/account/{account}/charge/{charge}/update', name: 'bank_charge_update')]
     #[ParamConverter('account', options: ['mapping' => ['account' => 'id']])]

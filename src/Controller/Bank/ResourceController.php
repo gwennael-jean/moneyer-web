@@ -12,6 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ResourceController extends AbstractController
 {
+    #[Route('/resources', name: 'bank_resource_list')]
+    public function list(Request $request): Response
+    {
+
+    }
+
     #[Route('/bank/account/{account}/resource/add', name: 'bank_resource_add')]
     #[Route('/bank/account/{account}/resource/{resource}/update', name: 'bank_resource_update')]
     #[ParamConverter('account', options: ['mapping' => ['account' => 'id']])]

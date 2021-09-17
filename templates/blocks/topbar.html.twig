@@ -4,7 +4,22 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item px-2">
                     <a class="nav-link" aria-current="page" href="{{ path('dashboard') }}">
-                        {% trans %}Home{% endtrans %}
+                        {% trans %}Dashboard{% endtrans %}
+                    </a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link" aria-current="page" href="{{ path('bank_account_list') }}">
+                        {% trans %}Account List{% endtrans %}
+                    </a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link" aria-current="page" href="{{ path('bank_charge_list') }}">
+                        {% trans %}Charge List{% endtrans %}
+                    </a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link" aria-current="page" href="{{ path('bank_resource_list') }}">
+                        {% trans %}Resource List{% endtrans %}
                     </a>
                 </li>
             </ul>
