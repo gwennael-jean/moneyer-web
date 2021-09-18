@@ -1,6 +1,6 @@
 {% extends 'base-connected.html.twig' %}
 
-{% block title %}{% trans %}Resource List{% endtrans %}{{ parent() }}{% endblock %}
+{% block title %}{% trans %}Charge List{% endtrans %}{{ parent() }}{% endblock %}
 
 {% block body %}
 
@@ -22,18 +22,18 @@
         <table class="table">
             <thead>
             <tr>
-                <th>{% trans %}Resource Name{% endtrans %}</th>
+                <th>{% trans %}Charge Name{% endtrans %}</th>
                 <th>{% trans %}Account{% endtrans %}</th>
                 <th class="text-end">{% trans %}Amount{% endtrans %}</th>
                 <th class="text-end">{% trans %}Actions{% endtrans %}</th>
             </tr>
             </thead>
             <tbody>
-            {% for resource in resources %}
+            {% for charge in charges %}
                 <tr>
-                    <td>{{ resource.name }}</td>
-                    <td>{{ resource.account.name }}</td>
-                    <td class="text-end">{{ resource.amount | format_currency('EUR') }}</td>
+                    <td>{{ charge.name }}</td>
+                    <td>{{ charge.account.name }}</td>
+                    <td class="text-end">{{ charge.amount | format_currency('EUR') }}</td>
                     <td class="text-end">
 
                         <div class="btn-group">
@@ -41,11 +41,11 @@
                                 Action
                             </button>
                             <ul class="dropdown-menu">
-                                {% if is_granted('edit', resource) %}
+                                {% if is_granted('edit', charge) %}
                                     <li>
-                                        <a href="{{ path('bank_resource_update', { account: resource.account.id, resource: resource.id }) }}" class="dropdown-item">
+                                        <a href="{{ path('bank_charge_update', { account: charge.account.id, charge: charge.id }) }}" class="dropdown-item">
                                             <i class="fas fa-pencil-alt"></i>
-                                            {% trans %}Edit Resource{% endtrans %}
+                                            {% trans %}Edit Charge{% endtrans %}
                                         </a>
                                     </li>
                                 {% endif %}
@@ -53,7 +53,7 @@
                                 <li>
                                     <a href="#" class="dropdown-item">
                                         <i class="fas fa-trash"></i>
-                                        {% trans %}Delete Resource{% endtrans %}
+                                        {% trans %}Delete Charge{% endtrans %}
                                     </a>
                                 </li>
                             </ul>

@@ -3,6 +3,7 @@
 namespace App\Repository\Bank;
 
 use App\Entity\Bank\Charge;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,21 @@ class ChargeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Charge::class);
+    }
+
+    /**
+     * @return Charge[] Returns an array of Charge objects
+     */
+    public function findByUser(User $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('c');
+
+        return $queryBuilder
+            ->join('c.account', 'a')
+            ->andWhere('a.owner = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     // /**
