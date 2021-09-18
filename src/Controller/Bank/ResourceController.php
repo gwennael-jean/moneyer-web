@@ -3,7 +3,9 @@
 namespace App\Controller\Bank;
 
 use App\Entity\Bank;
+use App\Entity\User;
 use App\Form\Bank\ResourceType;
+use App\Service\Provider\Bank\ResourceProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,10 +14,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ResourceController extends AbstractController
 {
+    public function __construct(
+        private ResourceProvider $resourceProvider
+    )
+    {
+    }
+
     #[Route('/resources', name: 'bank_resource_list')]
     public function list(Request $request): Response
     {
+        $user = $this->getUser();
 
+        if (!$user instanceof User) {
+            throw $this->createNotFoundException("Only logged user can access to this page.");
+        }
+
+        $resources = $this->resourceProvider->getByUser($user);
+
+        return $this->render('pages/resource/list.html.twig', [
+            'resources' => $resources,
+        ]);
     }
 
     #[Route('/bank/account/{account}/resource/add', name: 'bank_resource_add')]

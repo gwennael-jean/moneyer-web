@@ -1,0 +1,67 @@
+{% extends 'base-connected.html.twig' %}
+
+{% block title %}{% trans %}Resource List{% endtrans %}{{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <nav class="navbar navbar-expand navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                {% trans %}Search{% endtrans %}:
+            </a>
+            <div class="collapse navbar-collapse" id="searchbar">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mb-3">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{% trans %}Resource Name{% endtrans %}</th>
+                <th>{% trans %}Account{% endtrans %}</th>
+                <th>{% trans %}Amount{% endtrans %}</th>
+                <th class="text-end">{% trans %}Actions{% endtrans %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for resource in resources %}
+                <tr>
+                    <td>{{ resource.name }}</td>
+                    <td>{{ resource.account.name }}</td>
+                    <td class="text-end">{{ resource.amount | format_currency('EUR') }}</td>
+                    <td class="text-end">
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% if is_granted('edit', resource) %}
+                                    <li>
+                                        <a href="{{ path('bank_resource_update', { account: resource.account.id, resource: resource.id }) }}" class="dropdown-item">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            {% trans %}Edit Resource{% endtrans %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <li>
+                                    <a href="#" class="dropdown-item">
+                                        <i class="fas fa-trash"></i>
+                                        {% trans %}Delete Resource{% endtrans %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
