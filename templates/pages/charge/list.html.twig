@@ -1,0 +1,67 @@
+{% extends 'base-connected.html.twig' %}
+
+{% block title %}{% trans %}Charge List{% endtrans %}{{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <nav class="navbar navbar-expand navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                {% trans %}Search{% endtrans %}:
+            </a>
+            <div class="collapse navbar-collapse" id="searchbar">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mb-3">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{% trans %}Charge Name{% endtrans %}</th>
+                <th>{% trans %}Account{% endtrans %}</th>
+                <th class="text-end">{% trans %}Amount{% endtrans %}</th>
+                <th class="text-end">{% trans %}Actions{% endtrans %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for charge in charges %}
+                <tr>
+                    <td>{{ charge.name }}</td>
+                    <td>{{ charge.account.name }}</td>
+                    <td class="text-end">{{ charge.amount | format_currency('EUR') }}</td>
+                    <td class="text-end">
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% if is_granted('edit', charge) %}
+                                    <li>
+                                        <a href="{{ path('bank_charge_update', { account: charge.account.id, charge: charge.id }) }}" class="dropdown-item">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            {% trans %}Edit Charge{% endtrans %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <li>
+                                    <a href="#" class="dropdown-item">
+                                        <i class="fas fa-trash"></i>
+                                        {% trans %}Delete Charge{% endtrans %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

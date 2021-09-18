@@ -3,7 +3,9 @@
 namespace App\Controller\Bank;
 
 use App\Entity\Bank;
+use App\Entity\User;
 use App\Form\Bank\ChargeType;
+use App\Service\Provider\Bank\ChargeProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +14,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChargeController extends AbstractController
 {
+    public function __construct(
+        private ChargeProvider $chargeProvider
+    )
+    {
+    }
+
+    #[Route('/charges', name: 'bank_charge_list')]
+    public function list(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createNotFoundException("Only logged user can access to this page.");
+        }
+
+        $charges = $this->chargeProvider->getByUser($user);
+
+        return $this->render('pages/charge/list.html.twig', [
+            'charges' => $charges,
+        ]);
+    }
+
     #[Route('/bank/account/{account}/charge/add', name: 'bank_charge_add')]
     #[Route('/bank/account/{account}/charge/{charge}/update', name: 'bank_charge_update')]
     #[ParamConverter('account', options: ['mapping' => ['account' => 'id']])]

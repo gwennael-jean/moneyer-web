@@ -8,81 +8,27 @@
     <div class="d-flex align-items-center justify-content-between">
         <div class="flex-fill">
             {{ account.name }}
-            {% if account.hasResources %}
-                <span class="text-muted">
-                    ({{ account.totalResources | format_currency('EUR') }})
-                </span>
-            {% endif %}
-        </div>
-        <div>
-            <div class="dropdown">
-                <button class="btn" type="button" id="button-account-{{ account.id }}" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button-account-{{ account.id }}">
-                    {% if is_granted('edit', account) %}
-                        <li>
-                            <a class="dropdown-item" href="{{ path('bank_account_update', { account: account.id }) }}">
-                                <i class="fas fa-pencil-alt"></i>
-                                {% trans %}Update{% endtrans %}
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    {% if is_granted('edit', account) %}
-                        <li>
-                            <a class="dropdown-item" href="{{ path('bank_resource_add', { account: account.id }) }}">
-                                <i class="fas fa-plus"></i>
-                                {% trans %}Add resource{% endtrans %}
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    {% if is_granted('edit', account) %}
-                        <li>
-                            <a class="dropdown-item" href="{{ path('bank_charge_add', { account: account.id }) }}">
-                                <i class="fas fa-plus"></i>
-                                {% trans %}Add charge{% endtrans %}
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    {% if is_granted('share', account) %}
-                        <li>
-                            <a class="dropdown-item" href="{{ path('bank_account_share', { account: account.id }) }}">
-                                <i class="fas fa-share-alt"></i>
-                                {% trans %}Share account{% endtrans %}
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block body %}
-    <table class="table table-borderless table-sm table-hover table-py-0">
-        {% for charge in account.charges(app.user) %}
-            <tr class="align-middle">
-                <td class="w-100">
-                    {{ charge.name }}
-                </td>
-                <td class="text-end">
-                    {{ charge.amount | format_currency('EUR') }}
-                </td>
-                <td class="d-flex">
-                    <a class="btn" href="{{ path('bank_charge_distribution_index', { account: account.id, charge: charge.id }) }}">
-                        <i class="{{ ['fas fa-share-alt'] | merge(charge.hasChargeDistribution ? [] : ['text-muted']) | join(' ') }}"></i>
-                    </a>
-                    <a class="btn" href="{{ path('bank_charge_update', { account: account.id, charge: charge.id }) }}">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div class="row">
+        <div class="col-12 col-md-8">
+            {% trans %}Resources{% endtrans %}
+        </div>
+        <div class="col-12 col-md-4 text-end">
+            {{ account.totalResources | format_currency('EUR') }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-8">
+            {% trans %}Charges{% endtrans %}
+        </div>
+        <div class="col-12 col-md-4 text-end">
+            {{ account.totalCharges | format_currency('EUR') }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer %}

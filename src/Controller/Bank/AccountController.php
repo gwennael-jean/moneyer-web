@@ -8,6 +8,9 @@ use App\Entity\User;
 use App\Form\Bank\AccountShareType;
 use App\Form\Bank\AccountType;
 use App\Security\Voter\Bank\AccountVoter;
+use App\Service\Provider\Bank\AccountProvider;
+use App\Service\Transfer\LivingWageComputer;
+use App\Service\Transfer\TransferComputer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +18,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccountController extends AbstractController
 {
+    public function __construct(
+        private AccountProvider $accountProvider,
+    )
+    {
+    }
+
+    #[Route('/accounts', name: 'bank_account_list')]
+    public function list(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createNotFoundException("Only logged user can access to this page.");
+        }
+
+        $accounts = $this->accountProvider->getByUser($user);
+
+        return $this->render('pages/account/list.html.twig', [
+            'accounts' => $accounts,
+        ]);
+    }
+
     #[Route('/account/{account}/update', name: 'bank_account_update')]
     public function update(Request $request, Account $account): Response
     {

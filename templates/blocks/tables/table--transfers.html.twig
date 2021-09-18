@@ -3,7 +3,7 @@
     <tr>
         <th>{% trans %}Account from{% endtrans %}</th>
         <th>{% trans %}Account to{% endtrans %}</th>
-        <th>{% trans %}Amount{% endtrans %}</th>
+        <th class="text-end">{% trans %}Amount{% endtrans %}</th>
     </tr>
     </thead>
     <tbody>
@@ -23,7 +23,7 @@
                     <div class="text-muted">{{ transfer.to.owner.fullname }}</div>
                 {% endif %}
             </td>
-            <td>{{ transfer.amount | format_currency('EUR') }}</td>
+            <td class="text-end">{{ transfer.amount | format_currency('EUR') }}</td>
         </tr>
     {% endfor %}
     </tbody>
