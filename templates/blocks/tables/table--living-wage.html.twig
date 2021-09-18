@@ -2,14 +2,14 @@
     <thead>
     <tr>
         <th>{% trans %}User{% endtrans %}</th>
-        <th>{% trans %}Living Wage{% endtrans %}</th>
+        <th class="text-end">{% trans %}Living Wage{% endtrans %}</th>
     </tr>
     </thead>
     <tbody>
         {% for user, amount in livingWage.map %}
             <tr>
                 <td>{{ user.fullname }}</td>
-                <td>{{ amount | format_currency('EUR') }}</td>
+                <td class="text-end">{{ amount | format_currency('EUR') }}</td>
             </tr>
         {% endfor %}
     </tbody>
