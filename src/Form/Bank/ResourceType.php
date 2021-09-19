@@ -14,6 +14,7 @@ class ResourceType extends AbstractType
         $builder
             ->add('name')
             ->add('amount')
+            ->add('account')
         ;
     }
 

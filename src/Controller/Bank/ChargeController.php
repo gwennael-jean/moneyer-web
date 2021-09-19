@@ -5,7 +5,7 @@ namespace App\Controller\Bank;
 use App\Entity\Bank;
 use App\Entity\User;
 use App\Form\Bank\ChargeType;
-use App\Service\Provider\Bank\ChargeProvider;
+use App\Repository\Bank\ChargeRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChargeController extends AbstractController
 {
     public function __construct(
-        private ChargeProvider $chargeProvider
+        private ChargeRepository $chargeRepository
     )
     {
     }
@@ -29,21 +29,20 @@ class ChargeController extends AbstractController
             throw $this->createNotFoundException("Only logged user can access to this page.");
         }
 
-        $charges = $this->chargeProvider->getByUser($user);
+        $charges = $this->chargeRepository->findByUser($user);
 
         return $this->render('pages/charge/list.html.twig', [
             'charges' => $charges,
         ]);
     }
 
-    #[Route('/bank/account/{account}/charge/add', name: 'bank_charge_add')]
-    #[Route('/bank/account/{account}/charge/{charge}/update', name: 'bank_charge_update')]
+    #[Route('/charge/add', name: 'bank_charge_add')]
+    #[Route('/charge/{charge}/update', name: 'bank_charge_update')]
     #[ParamConverter('account', options: ['mapping' => ['account' => 'id']])]
     #[ParamConverter('charge', options: ['mapping' => ['charge' => 'id']])]
-    public function add(Request $request, Bank\Account $account, ?Bank\Charge $charge = null): Response
+    public function add(Request $request, ?Bank\Charge $charge = null): Response
     {
-        $charge = $charge ?? (new Bank\Charge())
-            ->setAccount($account);
+        $charge = $charge ?? (new Bank\Charge());
 
         $form = $this->createForm(ChargeType::class, $charge);
 
@@ -57,7 +56,7 @@ class ChargeController extends AbstractController
             $this->getDoctrine()->getManager()->persist($charge);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_charge_list');
         }
 
         $template = $charge->getId()
@@ -70,7 +69,7 @@ class ChargeController extends AbstractController
         ]);
     }
 
-    #[Route('/bank/charge/{charge}/delete', name: 'bank_charge_delete')]
+    #[Route('/charge/{charge}/delete', name: 'bank_charge_delete')]
     public function delete(Request $request, Bank\Charge $charge)
     {
         if ($request->isMethod(Request::METHOD_POST)) {
@@ -78,7 +77,7 @@ class ChargeController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "Charge deleted successfully.");
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_charge_list');
         }
 
         return $this->render("pages/bank/charge/delete.html.twig", [

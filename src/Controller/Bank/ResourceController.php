@@ -5,6 +5,7 @@ namespace App\Controller\Bank;
 use App\Entity\Bank;
 use App\Entity\User;
 use App\Form\Bank\ResourceType;
+use App\Repository\Bank\ResourceRepository;
 use App\Service\Provider\Bank\ResourceProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ResourceController extends AbstractController
 {
     public function __construct(
-        private ResourceProvider $resourceProvider
+        private ResourceRepository $resourceRepository
     )
     {
     }
@@ -29,21 +30,20 @@ class ResourceController extends AbstractController
             throw $this->createNotFoundException("Only logged user can access to this page.");
         }
 
-        $resources = $this->resourceProvider->getByUser($user);
+        $resources = $this->resourceRepository->findByUser($user);
 
         return $this->render('pages/resource/list.html.twig', [
             'resources' => $resources,
         ]);
     }
 
-    #[Route('/bank/account/{account}/resource/add', name: 'bank_resource_add')]
-    #[Route('/bank/account/{account}/resource/{resource}/update', name: 'bank_resource_update')]
+    #[Route('/resource/add', name: 'bank_resource_add')]
+    #[Route('/resource/{resource}/update', name: 'bank_resource_update')]
     #[ParamConverter('account', options: ['mapping' => ['account' => 'id']])]
     #[ParamConverter('resource', options: ['mapping' => ['resource' => 'id']])]
-    public function add(Request $request, Bank\Account $account, ?Bank\Resource $resource = null): Response
+    public function add(Request $request, ?Bank\Resource $resource = null): Response
     {
-        $resource = $resource ?? (new Bank\Resource())
-                ->setAccount($account);
+        $resource = $resource ?? (new Bank\Resource());
 
         $form = $this->createForm(ResourceType::class, $resource);
 
@@ -57,7 +57,7 @@ class ResourceController extends AbstractController
             $this->getDoctrine()->getManager()->persist($resource);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_resource_list');
         }
 
         $template = $resource->getId()
@@ -70,7 +70,7 @@ class ResourceController extends AbstractController
         ]);
     }
 
-    #[Route('/bank/resource/{resource}/delete', name: 'bank_resource_delete')]
+    #[Route('/resource/{resource}/delete', name: 'bank_resource_delete')]
     public function delete(Request $request, Bank\Resource $resource)
     {
         if ($request->isMethod(Request::METHOD_POST)) {
@@ -78,7 +78,7 @@ class ResourceController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "Resource deleted successfully.");
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_resource_list');
         }
 
         return $this->render("pages/bank/resource/delete.html.twig", [

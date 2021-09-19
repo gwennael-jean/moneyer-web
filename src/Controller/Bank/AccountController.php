@@ -9,8 +9,6 @@ use App\Form\Bank\AccountShareType;
 use App\Form\Bank\AccountType;
 use App\Security\Voter\Bank\AccountVoter;
 use App\Service\Provider\Bank\AccountProvider;
-use App\Service\Transfer\LivingWageComputer;
-use App\Service\Transfer\TransferComputer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +28,7 @@ class AccountController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            throw $this->createNotFoundException("Only logged user can access to this page.");
+            throw $this->createAccessDeniedException("Only logged user can access to this page.");
         }
 
         $accounts = $this->accountProvider->getByUser($user);
@@ -56,7 +54,7 @@ class AccountController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "Account saved successfully.");
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_account_list');
         }
 
         return $this->render('pages/bank/account/update.html.twig', [
@@ -83,7 +81,7 @@ class AccountController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "Account shared successfully.");
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_account_list');
         }
 
         return $this->render('pages/bank/account/share.html.twig', [
@@ -95,6 +93,8 @@ class AccountController extends AbstractController
     #[Route('/account/{accountShare}', name: 'bank_account_unshare')]
     public function unshare(Request $request, AccountShare $accountShare): Response
     {
+        $this->denyAccessUnlessGranted(AccountVoter::SHARE, $accountShare->getAccount());
+
         if ($request->isMethod(Request::METHOD_POST)) {
 
             foreach ($accountShare->getAccount()->getCharges() as $charge) {
@@ -113,7 +113,7 @@ class AccountController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "Account share deleted successfully.");
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_account_list');
         }
 
         return $this->render("pages/bank/account/unshare.html.twig", [

@@ -47,3 +47,6 @@ security:
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/dashboard, roles: IS_AUTHENTICATED_REMEMBERED }
+         - { path: ^/account, roles: IS_AUTHENTICATED_REMEMBERED }
+         - { path: ^/charge, roles: IS_AUTHENTICATED_REMEMBERED }
+         - { path: ^/resource, roles: IS_AUTHENTICATED_REMEMBERED }

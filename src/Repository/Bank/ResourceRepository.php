@@ -31,6 +31,22 @@ class ResourceRepository extends ServiceEntityRepository
 
         return $queryBuilder
             ->join('r.account', 'a')
+            ->leftJoin('a.accountShares', 's')
+            ->andWhere('a.createdBy = :user OR a.owner = :user OR s.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Resource[] Returns an array of Resource objects
+     */
+    public function findByOwner(User $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+
+        return $queryBuilder
+            ->join('r.account', 'a')
             ->andWhere('a.owner = :user')
             ->setParameter('user', $user)
             ->getQuery()

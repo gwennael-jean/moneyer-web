@@ -50,12 +50,14 @@
                                     </li>
                                 {% endif %}
 
+                                {% if is_granted('delete', charge) %}
                                 <li>
                                     <a href="#" class="dropdown-item">
                                         <i class="fas fa-trash"></i>
                                         {% trans %}Delete Charge{% endtrans %}
                                     </a>
                                 </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </td>

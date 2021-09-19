@@ -14,6 +14,7 @@ class ChargeType extends AbstractType
         $builder
             ->add('name')
             ->add('amount')
+            ->add('account')
         ;
     }
 
