@@ -32,7 +32,7 @@ class ResourceController extends AbstractController
 
         $resources = $this->resourceRepository->findByUser($user);
 
-        return $this->render('pages/resource/list.html.twig', [
+        return $this->render('pages/bank/resource/list.html.twig', [
             'resources' => $resources,
         ]);
     }
@@ -45,7 +45,9 @@ class ResourceController extends AbstractController
     {
         $resource = $resource ?? (new Bank\Resource());
 
-        $form = $this->createForm(ResourceType::class, $resource);
+        $form = $this->createForm(ResourceType::class, $resource, [
+            'user' => $this->getUser()
+        ]);
 
         $form->handleRequest($request);
 

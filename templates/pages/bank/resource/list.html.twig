@@ -6,15 +6,23 @@
 
     <nav class="navbar navbar-expand navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                {% trans %}Search{% endtrans %}:
-            </a>
-            <div class="collapse navbar-collapse" id="searchbar">
-                <form class="d-flex">
+            <div class="d-flex">
+                <a class="navbar-brand d-inline" href="#">
+                    {% trans %}Search{% endtrans %}:
+                </a>
+                <form class="d-flex mb-2 mb-lg-0">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary" aria-current="page" href="{{ path('bank_resource_add') }}">
+                        <i class="fas fa-plus"></i>
+                        Ajouter
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 
@@ -32,7 +40,12 @@
             {% for resource in resources %}
                 <tr>
                     <td>{{ resource.name }}</td>
-                    <td>{{ resource.account.name }}</td>
+                    <td>
+                        <div>{{ resource.account.name }}</div>
+                        {% if resource.account.owner is not null and resource.account.owner is not same as app.user %}
+                            <div class="text-muted">({{ resource.account.owner.fullname }})</div>
+                        {% endif %}
+                    </td>
                     <td class="text-end">{{ resource.amount | format_currency('EUR') }}</td>
                     <td class="text-end">
 
@@ -43,7 +56,7 @@
                             <ul class="dropdown-menu">
                                 {% if is_granted('edit', resource) %}
                                     <li>
-                                        <a href="{{ path('bank_resource_update', { account: resource.account.id, resource: resource.id }) }}" class="dropdown-item">
+                                        <a href="{{ path('bank_resource_update', { resource: resource.id }) }}" class="dropdown-item">
                                             <i class="fas fa-pencil-alt"></i>
                                             {% trans %}Edit Resource{% endtrans %}
                                         </a>
@@ -51,7 +64,7 @@
                                 {% endif %}
 
                                 <li>
-                                    <a href="#" class="dropdown-item">
+                                    <a href="{{ path('bank_resource_delete', { resource: resource.id }) }}" class="dropdown-item">
                                         <i class="fas fa-trash"></i>
                                         {% trans %}Delete Resource{% endtrans %}
                                     </a>

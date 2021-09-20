@@ -34,7 +34,7 @@ class ChargeVoter extends Voter
         switch ($attribute) {
             case self::VIEW: return $this->isCreatedBy($subject, $user) || $this->isOwner($subject, $user) || $this->canView($subject, $user);
             case self::EDIT: return $this->isCreatedBy($subject, $user) || $this->isOwner($subject, $user) || $this->canEdit($subject, $user);
-            case self::DELETE: return $this->isCreatedBy($subject, $user) || $this->isOwner($subject, $user);
+            case self::DELETE: return $this->isCreatedBy($subject, $user) || $this->isOwner($subject, $user) || $this->canEdit($subject, $user);
         }
 
         return false;

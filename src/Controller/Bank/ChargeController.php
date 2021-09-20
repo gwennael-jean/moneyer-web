@@ -31,7 +31,7 @@ class ChargeController extends AbstractController
 
         $charges = $this->chargeRepository->findByUser($user);
 
-        return $this->render('pages/charge/list.html.twig', [
+        return $this->render('pages/bank/charge/list.html.twig', [
             'charges' => $charges,
         ]);
     }
@@ -44,7 +44,9 @@ class ChargeController extends AbstractController
     {
         $charge = $charge ?? (new Bank\Charge());
 
-        $form = $this->createForm(ChargeType::class, $charge);
+        $form = $this->createForm(ChargeType::class, $charge, [
+            'user' => $this->getUser()
+        ]);
 
         $form->handleRequest($request);
 
