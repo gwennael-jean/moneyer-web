@@ -314,7 +314,7 @@ class TransferComputerTest extends TestCase
 
         $accounts = [$account1, $account2, $account3];
 
-        $this->resourceRepositoryMock->method('findByUser')->willReturnCallback(function ($user) use ($accounts) {
+        $this->resourceRepositoryMock->method('findByOWner')->willReturnCallback(function ($user) use ($accounts) {
             $userAccounts = array_filter($accounts, function (Bank\Account $account) use ($user) {
                 return $account->getOwner() === $user;
             });

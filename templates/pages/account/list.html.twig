@@ -78,12 +78,14 @@
                                     </li>
                                 {% endif %}
 
+                                {% if is_granted('delete', account) %}
                                 <li>
                                     <a href="{{ path('bank_account_share', { account: account.id }) }}" class="dropdown-item">
                                         <i class="fas fa-trash"></i>
                                         {% trans %}Delete Account{% endtrans %}
                                     </a>
                                 </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </td>

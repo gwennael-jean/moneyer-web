@@ -26,7 +26,7 @@ class ResourceProvider
     public function getByUser(User $user): ArrayCollection
     {
         if (!isset($this->resourcesByUser[$user])) {
-            $this->resourcesByUser[$user] = $this->resourceRepository->findByUser($user);
+            $this->resourcesByUser[$user] = $this->resourceRepository->findByOwner($user);
         }
 
         return new ArrayCollection($this->resourcesByUser[$user]);

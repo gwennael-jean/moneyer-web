@@ -29,7 +29,8 @@ class ChargeRepository extends ServiceEntityRepository
 
         return $queryBuilder
             ->join('c.account', 'a')
-            ->andWhere('a.owner = :user')
+            ->leftJoin('a.accountShares', 's')
+            ->andWhere('a.createdBy = :user OR a.owner = :user OR s.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
