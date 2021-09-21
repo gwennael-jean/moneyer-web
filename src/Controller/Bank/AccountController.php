@@ -33,14 +33,17 @@ class AccountController extends AbstractController
 
         $accounts = $this->accountProvider->getByUser($user);
 
-        return $this->render('pages/account/list.html.twig', [
+        return $this->render('pages/bank/account/list.html.twig', [
             'accounts' => $accounts,
         ]);
     }
 
+    #[Route('/charge/add', name: 'bank_account_add')]
     #[Route('/account/{account}/update', name: 'bank_account_update')]
-    public function update(Request $request, Account $account): Response
+    public function update(Request $request, ?Account $account): Response
     {
+        $account = $account ?? (new Account());
+
         $this->denyAccessUnlessGranted(AccountVoter::EDIT, $account);
 
         $form = $this->createForm(AccountType::class, $account, [
