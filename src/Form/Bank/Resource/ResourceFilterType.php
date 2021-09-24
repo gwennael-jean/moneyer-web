@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Bank;
+namespace App\Form\Bank\Resource;
 
 use App\Entity\Bank\Account;
 use App\Entity\Bank\Resource;
@@ -9,9 +9,10 @@ use App\Service\Provider\Bank\AccountProvider;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ResourceType extends AbstractType
+class ResourceFilterType extends AbstractType
 {
     public function __construct(
         private AccountProvider $accountProvider
@@ -22,9 +23,16 @@ class ResourceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('amount')
+            ->setMethod(Request::METHOD_GET)
+            ->add('name', null, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Resource Name'
+                ]
+            ])
             ->add('account', EntityType::class, [
+                'required' => false,
+                'placeholder' => 'Account',
                 'class' => Account::class,
                 'choices' => $this->accountProvider->getByUser($options['user']),'choice_label' => function (Account $account) use ($options) {
                     return null !== $account->getOwner() && $account->getOwner() !== $options['user']
@@ -39,9 +47,15 @@ class ResourceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Resource::class,
+            'csrf_protection' => false,
         ]);
 
         $resolver->setRequired('user');
         $resolver->setAllowedTypes('user', User::class);
+    }
+
+    public function getBlockPrefix()
+    {
+        return '';
     }
 }
