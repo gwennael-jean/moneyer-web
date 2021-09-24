@@ -12,12 +12,14 @@
             {{ form_end(form) }}
         </div>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="btn btn-outline-primary" aria-current="page" href="{{ path('bank_account_add') }}">
-                    <i class="fas fa-plus"></i>
-                    {% trans %}Add{% endtrans %}
-                </a>
-            </li>
+            {% for action in actions %}
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary" aria-current="page" href="{{ path(action.route) }}">
+                        <i class="fas {{ action.icon }}"></i>
+                        {{ action.text | trans }}
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     </div>
 </nav>

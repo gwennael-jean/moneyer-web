@@ -5,7 +5,10 @@
 {% block body %}
 
     {{ sonata_block_render({ type: 'app.block.searchbar' }, {
-        form: formFilter
+        form: formFilter,
+        actions: [
+            { route: 'bank_charge_add', icon: 'fa-plus', text: 'Add' }
+        ]
     }) }}
 
     <div class="mb-3">

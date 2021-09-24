@@ -21,7 +21,8 @@ class SearchbarBlock implements BlockServiceInterface
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $content = $this->twig->render($blockContext->getTemplate(), [
-            'form' => $blockContext->getSetting('form')
+            'form' => $blockContext->getSetting('form'),
+            'actions' => $blockContext->getSetting('actions'),
         ]);
 
         $response->setContent($content);
@@ -43,6 +44,7 @@ class SearchbarBlock implements BlockServiceInterface
     {
         $resolver->setDefaults([
             'template' => 'blocks/navbars/searchbar.html.twig',
+            'actions' => []
         ]);
 
         $resolver->setRequired('form');
