@@ -11,6 +11,12 @@ services:
     tags:
       - { name: sonata.block }
 
+  app.block.searchbar:
+    class: App\Service\Block\SearchbarBlock
+    arguments: ['@twig']
+    tags:
+      - { name: sonata.block }
+
   app.block.card.account:
     class: App\Service\Block\AccountCardBlock
     arguments: ['@twig']
