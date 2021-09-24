@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="d-flex">
+            <a class="navbar-brand d-inline" href="#">
+                {% trans %}Search{% endtrans %}:
+            </a>
+            {{ form_start(form, {attr: {class: 'd-flex mb-2 mb-lg-0'}}) }}
+            {% for field in form %}
+                {{ form_widget(field, {attr: {class: 'me-2'}}) }}
+            {% endfor %}
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            {{ form_end(form) }}
+        </div>
+        <ul class="navbar-nav">
+            {% for action in actions %}
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary" aria-current="page" href="{{ path(action.route) }}">
+                        <i class="fas {{ action.icon }}"></i>
+                        {{ action.text | trans }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>

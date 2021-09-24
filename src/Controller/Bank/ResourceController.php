@@ -4,9 +4,10 @@ namespace App\Controller\Bank;
 
 use App\Entity\Bank;
 use App\Entity\User;
-use App\Form\Bank\ResourceType;
+use App\Form\Bank\Resource\ResourceFilterType;
+use App\Form\Bank\Resource\ResourceType;
 use App\Repository\Bank\ResourceRepository;
-use App\Service\Provider\Bank\ResourceProvider;
+use App\Util\Form\FormFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,10 +31,17 @@ class ResourceController extends AbstractController
             throw $this->createNotFoundException("Only logged user can access to this page.");
         }
 
-        $resources = $this->resourceRepository->findByUser($user);
+        $form = $this->createForm(ResourceFilterType::class, null, [
+            'user' => $this->getUser()
+        ]);
+
+        $form->handleRequest($request);
+
+        $resources = $this->resourceRepository->findByUser($user, new FormFilter($form));
 
         return $this->render('pages/bank/resource/list.html.twig', [
             'resources' => $resources,
+            'formFilter' => $form->createView(),
         ]);
     }
 

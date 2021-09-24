@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Bank;
+namespace App\Form\Bank\Charge;
 
 use App\Entity\Bank\Account;
 use App\Entity\Bank\Charge;
@@ -8,11 +8,11 @@ use App\Entity\User;
 use App\Service\Provider\Bank\AccountProvider;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChargeType extends AbstractType
+class ChargeFilterType extends AbstractType
 {
     public function __construct(
         private AccountProvider $accountProvider
@@ -23,9 +23,16 @@ class ChargeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('amount')
+            ->setMethod(Request::METHOD_GET)
+            ->add('name', null, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Charge Name'
+                ]
+            ])
             ->add('account', EntityType::class, [
+                'required' => false,
+                'placeholder' => 'Account',
                 'class' => Account::class,
                 'choices' => $this->accountProvider->getByUser($options['user']),
                 'choice_label' => function (Account $account) use ($options) {
@@ -41,9 +48,15 @@ class ChargeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Charge::class,
+            'csrf_protection' => false,
         ]);
 
         $resolver->setRequired('user');
         $resolver->setAllowedTypes('user', User::class);
+    }
+
+    public function getBlockPrefix()
+    {
+        return '';
     }
 }

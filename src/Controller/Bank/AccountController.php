@@ -5,10 +5,12 @@ namespace App\Controller\Bank;
 use App\Entity\Bank\Account;
 use App\Entity\Bank\AccountShare;
 use App\Entity\User;
+use App\Form\Bank\Account\AccountFilterType;
 use App\Form\Bank\AccountShareType;
-use App\Form\Bank\AccountType;
+use App\Form\Bank\Account\AccountType;
+use App\Repository\Bank\AccountRepository;
 use App\Security\Voter\Bank\AccountVoter;
-use App\Service\Provider\Bank\AccountProvider;
+use App\Util\Form\FormFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AccountController extends AbstractController
 {
     public function __construct(
-        private AccountProvider $accountProvider,
+        private AccountRepository $accountRepository,
     )
     {
     }
@@ -31,21 +33,27 @@ class AccountController extends AbstractController
             throw $this->createAccessDeniedException("Only logged user can access to this page.");
         }
 
-        $accounts = $this->accountProvider->getByUser($user);
+        $form = $this->createForm(AccountFilterType::class);
 
-        return $this->render('pages/account/list.html.twig', [
+        $form->handleRequest($request);
+
+        $accounts = $this->accountRepository->findByUser($user, new FormFilter($form));
+
+        return $this->render('pages/bank/account/list.html.twig', [
             'accounts' => $accounts,
+            'formFilter' => $form->createView()
         ]);
     }
 
+    #[Route('/charge/add', name: 'bank_account_add')]
     #[Route('/account/{account}/update', name: 'bank_account_update')]
-    public function update(Request $request, Account $account): Response
+    public function update(Request $request, ?Account $account): Response
     {
+        $account = $account ?? (new Account());
+
         $this->denyAccessUnlessGranted(AccountVoter::EDIT, $account);
 
-        $form = $this->createForm(AccountType::class, $account, [
-            'form_type' => 'simple'
-        ]);
+        $form = $this->createForm(AccountType::class, $account);
 
         $form->handleRequest($request);
 
@@ -62,7 +70,6 @@ class AccountController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 
     #[Route('/account/{account}/share', name: 'bank_account_share')]
     public function share(Request $request, Account $account): Response

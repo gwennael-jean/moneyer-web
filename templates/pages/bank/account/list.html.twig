@@ -4,19 +4,12 @@
 
 {% block body %}
 
-    <nav class="navbar navbar-expand navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                {% trans %}Search{% endtrans %}:
-            </a>
-            <div class="collapse navbar-collapse" id="searchbar">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+    {{ sonata_block_render({ type: 'app.block.searchbar' }, {
+        form: formFilter,
+        actions: [
+            { route: 'bank_account_add', icon: 'fa-plus', text: 'Add' }
+        ]
+    }) }}
 
     <div class="mb-3">
         <table class="table">

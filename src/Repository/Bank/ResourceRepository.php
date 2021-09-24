@@ -5,6 +5,7 @@ namespace App\Repository\Bank;
 use App\Entity\Bank\Account;
 use App\Entity\Bank\Resource;
 use App\Entity\User;
+use App\Util\Form\FormFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,15 +26,21 @@ class ResourceRepository extends ServiceEntityRepository
     /**
      * @return Resource[] Returns an array of Resource objects
      */
-    public function findByUser(User $user)
+    public function findByUser(User $user, ?FormFilter $formFilter = null)
     {
         $queryBuilder = $this->createQueryBuilder('r');
 
-        return $queryBuilder
+        $queryBuilder
             ->join('r.account', 'a')
             ->leftJoin('a.accountShares', 's')
             ->andWhere('a.createdBy = :user OR a.owner = :user OR s.user = :user')
-            ->setParameter('user', $user)
+            ->setParameter('user', $user);
+
+        if (null !== $formFilter && $formFilter->hasCriteria()) {
+            $queryBuilder->addCriteria($formFilter->getCriteria());
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult();
     }

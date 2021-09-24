@@ -4,8 +4,10 @@ namespace App\Controller\Bank;
 
 use App\Entity\Bank;
 use App\Entity\User;
-use App\Form\Bank\ChargeType;
+use App\Form\Bank\Charge\ChargeFilterType;
+use App\Form\Bank\Charge\ChargeType;
 use App\Repository\Bank\ChargeRepository;
+use App\Util\Form\FormFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,10 +31,17 @@ class ChargeController extends AbstractController
             throw $this->createNotFoundException("Only logged user can access to this page.");
         }
 
-        $charges = $this->chargeRepository->findByUser($user);
+        $form = $this->createForm(ChargeFilterType::class, null, [
+            'user' => $this->getUser()
+        ]);
+
+        $form->handleRequest($request);
+
+        $charges = $this->chargeRepository->findByUser($user, new FormFilter($form));
 
         return $this->render('pages/bank/charge/list.html.twig', [
             'charges' => $charges,
+            'formFilter' => $form->createView()
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Repository\Bank;
 
 use App\Entity\Bank\Charge;
 use App\Entity\User;
+use App\Util\Form\FormFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,15 +24,21 @@ class ChargeRepository extends ServiceEntityRepository
     /**
      * @return Charge[] Returns an array of Charge objects
      */
-    public function findByUser(User $user)
+    public function findByUser(User $user, ?FormFilter $formFilter = null)
     {
         $queryBuilder = $this->createQueryBuilder('c');
 
-        return $queryBuilder
+        $queryBuilder
             ->join('c.account', 'a')
             ->leftJoin('a.accountShares', 's')
             ->andWhere('a.createdBy = :user OR a.owner = :user OR s.user = :user')
-            ->setParameter('user', $user)
+            ->setParameter('user', $user);
+
+        if (null !== $formFilter && $formFilter->hasCriteria()) {
+            $queryBuilder->addCriteria($formFilter->getCriteria());
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult();
     }
