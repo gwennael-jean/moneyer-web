@@ -36,7 +36,7 @@ class AccountRepository extends ServiceEntityRepository
             ->orderBy("IF(a.owner = :user, 1, 0)", Criteria::DESC)
             ->addOrderBy("a.id");
 
-        if ($formFilter->hasCriteria()) {
+        if (null !== $formFilter && $formFilter->hasCriteria()) {
             $queryBuilder->addCriteria($formFilter->getCriteria());
         }
 
