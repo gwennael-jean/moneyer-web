@@ -169,7 +169,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }

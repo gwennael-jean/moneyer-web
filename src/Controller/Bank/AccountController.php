@@ -6,14 +6,17 @@ use App\Entity\Bank\Account;
 use App\Entity\Bank\AccountShare;
 use App\Entity\User;
 use App\Form\Bank\Account\AccountFilterType;
-use App\Form\Bank\AccountShareType;
 use App\Form\Bank\Account\AccountType;
+use App\Form\Bank\AccountShareType;
+use App\Notification\Bank\AccountShareNotification;
+use App\Notification\UserRecipient;
 use App\Repository\Bank\AccountRepository;
 use App\Security\Voter\Bank\AccountVoter;
 use App\Util\Form\FormFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AccountController extends AbstractController
@@ -72,7 +75,7 @@ class AccountController extends AbstractController
     }
 
     #[Route('/account/{account}/share', name: 'bank_account_share')]
-    public function share(Request $request, Account $account): Response
+    public function share(Request $request, Account $account, NotifierInterface $notifier): Response
     {
         $this->denyAccessUnlessGranted(AccountVoter::SHARE, $account);
 
@@ -86,6 +89,8 @@ class AccountController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->persist($accountShare);
             $this->getDoctrine()->getManager()->flush();
+
+            $notifier->send(new AccountShareNotification($accountShare, $this->getUser()), new UserRecipient($accountShare->getUser()));
 
             $this->addFlash('success', "Account shared successfully.");
             return $this->redirectToRoute('bank_account_list');
