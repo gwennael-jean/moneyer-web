@@ -9,6 +9,7 @@ use App\Form\Bank\Account\AccountFilterType;
 use App\Form\Bank\Account\AccountType;
 use App\Form\Bank\AccountShareType;
 use App\Notification\Bank\AccountShareNotification;
+use App\Notification\Bank\AccountUnshareNotification;
 use App\Notification\UserRecipient;
 use App\Repository\Bank\AccountRepository;
 use App\Security\Voter\Bank\AccountVoter;
@@ -103,7 +104,7 @@ class AccountController extends AbstractController
     }
 
     #[Route('/account/{accountShare}', name: 'bank_account_unshare')]
-    public function unshare(Request $request, AccountShare $accountShare): Response
+    public function unshare(Request $request, AccountShare $accountShare, NotifierInterface $notifier): Response
     {
         $this->denyAccessUnlessGranted(AccountVoter::SHARE, $accountShare->getAccount());
 
@@ -123,6 +124,8 @@ class AccountController extends AbstractController
 
             $this->getDoctrine()->getManager()->remove($accountShare);
             $this->getDoctrine()->getManager()->flush();
+
+            $notifier->send(new AccountUnshareNotification($accountShare, $this->getUser()), new UserRecipient($accountShare->getUser()));
 
             $this->addFlash('success', "Account share deleted successfully.");
             return $this->redirectToRoute('bank_account_list');
