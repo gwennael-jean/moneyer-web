@@ -29,7 +29,7 @@ services:
             - traefik.http.routers.moneyer_phpmyadmin.entryPoints=web
 
     smtp:
-        image: djfarrelly/maildev:0.13.4
+        image: djfarrelly/maildev
         restart: always
         labels:
             - traefik.enable=true

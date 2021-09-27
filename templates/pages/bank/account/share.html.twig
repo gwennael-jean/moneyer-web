@@ -6,13 +6,14 @@
     <div class="container">
         <div class="mb-3">
             <h1>{% trans %}Share account{% endtrans %}</h1>
+
             <div class="row">
                 <div class="col-12 col-lg-4">
                     <table class="table table-borderless">
                         {% for accountShare in account.accountShares %}
                             <tr>
                                 <td>{{ accountShare.user.fullname }}</td>
-                                <td>{{ accountShare.type | readable_enum | trans }}</td>
+                                <td>{{ accountShare.type | readable_enum('AccountShareType') | trans }}</td>
                                 <td>
                                     <a href="{{ path('bank_account_unshare', { accountShare: accountShare.id }) }}">
                                         {% trans %}Remove{% endtrans %}

@@ -1,0 +1,6 @@
+{% extends 'email.html.twig' %}
+
+{% block body %}
+    <p>{{ sharer.fullname }} has share account {{ accountShare.account.name }} with you.</p>
+    <p>Login to see it.</p>
+{% endblock %}

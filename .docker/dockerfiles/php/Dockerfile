@@ -12,7 +12,8 @@ RUN apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         libzip-dev \
-        graphviz
+        graphviz \
+        libxslt-dev
 
 RUN docker-php-ext-configure gd --enable-gd --with-jpeg --with-freetype
 
@@ -27,7 +28,7 @@ RUN pecl install apcu
 
 RUN pecl install xdebug
 
-RUN docker-php-ext-install pdo pdo_mysql zip gd intl opcache
+RUN docker-php-ext-install pdo pdo_mysql zip gd intl opcache xsl
 
 RUN docker-php-ext-enable apcu xdebug
 
