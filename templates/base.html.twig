@@ -11,11 +11,12 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body data-controller="app">
         {% block header %}{% endblock %}
         {% block body %}{% endblock %}
         {% block footer %}{% endblock %}
-        <div id="modal-form" class="modal fade" tabindex="-1">
+
+        <div id="modal-form" class="modal fade" tabindex="-1" data-controller="modal" data-target="app.modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

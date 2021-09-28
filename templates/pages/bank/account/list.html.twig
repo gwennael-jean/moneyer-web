@@ -7,7 +7,7 @@
     {{ sonata_block_render({ type: 'app.block.searchbar' }, {
         form: formFilter,
         actions: [
-            { route: 'bank_account_add', icon: 'fa-plus', text: 'Add' }
+            { route: 'bank_account_add', icon: 'fa-plus', text: 'Add', modal: "Add Account" }
         ]
     }) }}
 
@@ -41,13 +41,13 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#" class="dropdown-item">
+                                    <a href="{{ path('bank_charge_list', { account: account.id }) }}" class="dropdown-item">
                                         <i class="fas fa-eye"></i>
                                         {% trans %}Show Charges{% endtrans %}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="dropdown-item">
+                                    <a href="{{ path('bank_resource_list', { account: account.id }) }}" class="dropdown-item">
                                         <i class="fas fa-eye"></i>
                                         {% trans %}Show Resources{% endtrans %}
                                     </a>
@@ -55,7 +55,10 @@
 
                                 {% if is_granted('edit', account) %}
                                     <li>
-                                        <a href="{{ path('bank_account_update', { account: account.id }) }}" class="dropdown-item">
+                                        <a href="{{ path('bank_account_update', { account: account.id }) }}"
+                                           class="dropdown-item"
+                                           data-action="app#openModal"
+                                           data-title="{% trans %}Update account{% endtrans %}">
                                             <i class="fas fa-pencil-alt"></i>
                                             {% trans %}Edit Account{% endtrans %}
                                         </a>
@@ -64,7 +67,10 @@
 
                                 {% if is_granted('share', account) %}
                                     <li>
-                                        <a href="{{ path('bank_account_share', { account: account.id }) }}" class="dropdown-item">
+                                        <a href="{{ path('bank_account_share', { account: account.id }) }}"
+                                           class="dropdown-item"
+                                           data-action="app#openModal"
+                                           data-title="{% trans %}Share Account{% endtrans %}">
                                             <i class="fas fa-share-alt"></i>
                                             {% trans %}Share Account{% endtrans %}
                                         </a>
@@ -73,7 +79,7 @@
 
                                 {% if is_granted('delete', account) %}
                                 <li>
-                                    <a href="{{ path('bank_account_share', { account: account.id }) }}" class="dropdown-item">
+                                    <a href="{{ path('bank_account_delete', { account: account.id }) }}" class="dropdown-item">
                                         <i class="fas fa-trash"></i>
                                         {% trans %}Delete Account{% endtrans %}
                                     </a>

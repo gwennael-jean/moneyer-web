@@ -13,6 +13,7 @@ class AccountType extends AbstractType
     {
         $builder
             ->add('name', null, [
+                'empty_data' => '',
                 'attr' => [
                     'placeholder' => 'Account Name'
                 ]

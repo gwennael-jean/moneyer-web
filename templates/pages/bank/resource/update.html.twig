@@ -1,4 +1,4 @@
-{% extends 'base-connected.html.twig' %}
+{% extends app.request.isXmlHttpRequest ? 'base-connected-ajax-card.html.twig' : 'base-connected.html.twig' %}
 
 {% block title %}{% trans %}Update resource{% endtrans %}{{ parent() }}{% endblock %}
 
@@ -6,12 +6,15 @@
     <div class="container">
         <div class="mb-3">
             <h1>{% trans %}Update resource{% endtrans %}</h1>
+
             {{ form_start(form) }}
             {{ form_rest(form) }}
+
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i>
                 {% trans %}Update{% endtrans %}
             </button>
+
             <a class="btn btn-danger" href="{{ path('bank_resource_delete', { resource: resource.id }) }}">
                 <i class="fas fa-trash-alt"></i>
                 {% trans %}Delete{% endtrans %}
@@ -19,4 +22,21 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block ajax_card_body %}
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block ajax_card_footer %}
+    <a class="btn btn-danger" href="{{ path('bank_resource_delete', { resource: resource.id }) }}">
+        <i class="fas fa-trash-alt"></i>
+        {% trans %}Delete{% endtrans %}
+    </a>
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i>
+        {% trans %}Update{% endtrans %}
+    </button>
 {% endblock %}

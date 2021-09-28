@@ -7,7 +7,7 @@
     {{ sonata_block_render({ type: 'app.block.searchbar' }, {
         form: formFilter,
         actions: [
-            { route: 'bank_resource_add', icon: 'fa-plus', text: 'Add' }
+            { route: 'bank_resource_add', icon: 'fa-plus', text: 'Add', modal: "Add Resource" }
         ]
     }) }}
 
@@ -41,7 +41,10 @@
                             <ul class="dropdown-menu">
                                 {% if is_granted('edit', resource) %}
                                     <li>
-                                        <a href="{{ path('bank_resource_update', { resource: resource.id }) }}" class="dropdown-item">
+                                        <a href="{{ path('bank_resource_update', { resource: resource.id }) }}"
+                                           class="dropdown-item"
+                                           data-action="app#openModal"
+                                           data-title="{% trans %}Edit Resource{% endtrans %}">
                                             <i class="fas fa-pencil-alt"></i>
                                             {% trans %}Edit Resource{% endtrans %}
                                         </a>

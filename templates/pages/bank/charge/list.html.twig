@@ -7,7 +7,7 @@
     {{ sonata_block_render({ type: 'app.block.searchbar' }, {
         form: formFilter,
         actions: [
-            { route: 'bank_charge_add', icon: 'fa-plus', text: 'Add' }
+            { route: 'bank_charge_add', icon: 'fa-plus', text: 'Add', modal: "Add Charge" }
         ]
     }) }}
 
@@ -41,7 +41,10 @@
                             <ul class="dropdown-menu">
                                 {% if is_granted('edit', charge) %}
                                     <li>
-                                        <a href="{{ path('bank_charge_update', { charge: charge.id }) }}" class="dropdown-item">
+                                        <a href="{{ path('bank_charge_update', { charge: charge.id }) }}"
+                                           class="dropdown-item"
+                                           data-action="app#openModal"
+                                           data-title="{% trans %}Edit Charge{% endtrans %}">
                                             <i class="fas fa-pencil-alt"></i>
                                             {% trans %}Edit Charge{% endtrans %}
                                         </a>
