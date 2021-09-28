@@ -1,4 +1,4 @@
-{% extends 'base-connected.html.twig' %}
+{% extends app.request.isXmlHttpRequest ? 'base-connected-ajax-card.html.twig' : 'base-connected.html.twig' %}
 
 {% block title %}{% trans %}Set charge distribution{% endtrans %}{{ parent() }}{% endblock %}
 
@@ -13,7 +13,7 @@
                 {% trans %}Save{% endtrans %}
             </button>
             {% if charge.chargeDistribution is not null %}
-            <a class="btn btn-danger" href="{{ path('bank_charge_distribution_delete', { id: charge.chargeDistribution.id }) }}">
+            <a class="btn btn-danger" href="{{ path('bank_charge_distribution_delete', { chargeDistribution: charge.chargeDistribution.id }) }}">
                 <i class="fas fa-trash-alt"></i>
                 {% trans %}Delete{% endtrans %}
             </a>
@@ -21,4 +21,24 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block ajax_card_body %}
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block ajax_card_footer %}
+    {% if charge.chargeDistribution is not null %}
+        <a class="btn btn-danger" href="{{ path('bank_charge_distribution_delete', { chargeDistribution: charge.chargeDistribution.id }) }}">
+            <i class="fas fa-trash-alt"></i>
+            {% trans %}Delete{% endtrans %}
+        </a>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i>
+        {% trans %}Save{% endtrans %}
+    </button>
 {% endblock %}

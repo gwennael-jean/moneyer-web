@@ -18,8 +18,8 @@ class ChargeDistributionController extends AbstractController
     {
     }
 
-    #[Route('/bank/account/{account}/charge/{charge}/distribution', name: 'bank_charge_distribution_index')]
-    public function index(Request $request, Bank\Account $account, Bank\Charge $charge): Response
+    #[Route('/bank/charge/{charge}/distribution', name: 'bank_charge_distribution_index')]
+    public function index(Request $request, Bank\Charge $charge): Response
     {
         $chargeDistribution = $charge->getChargeDistribution() ?? (new Bank\ChargeDistribution())
             ->setCharge($charge);
@@ -36,7 +36,7 @@ class ChargeDistributionController extends AbstractController
             $this->getDoctrine()->getManager()->persist($chargeDistribution);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('bank_charge_list');
         }
 
         return $this->render("pages/bank/charge-distribution/index.html.twig", [
@@ -45,7 +45,7 @@ class ChargeDistributionController extends AbstractController
         ]);
     }
 
-    #[Route('/bank/charge/distribution/{id}/delete', name: 'bank_charge_distribution_delete')]
+    #[Route('/bank/charge-distribution/{chargeDistribution}/delete', name: 'bank_charge_distribution_delete')]
     public function delete(Request $request, Bank\ChargeDistribution $chargeDistribution): Response
     {
         if ($request->isMethod(Request::METHOD_POST)) {

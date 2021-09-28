@@ -21,6 +21,7 @@ class ChargeDistributionType extends AbstractType
             ->add('users', EntityType::class, [
                 'class' => User::class,
                 'multiple' => true,
+                'expanded' => true,
                 'choices' => $this->getUsers($options['accounts']),
                 'choice_label' => 'username',
             ])

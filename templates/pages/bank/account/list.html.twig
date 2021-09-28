@@ -27,13 +27,13 @@
             <tbody>
             {% for account in accounts %}
                 <tr>
-                    <td>{{ account.name }}</td>
-                    <td>{{ account.owner ? account.owner.fullname : '' }}</td>
-                    <td>{{ account.createdBy.fullname }}</td>
-                    <td class="text-end">{{ account.totalResources | format_currency('EUR') }}</td>
-                    <td class="text-end">{{ account.totalCharges | format_currency('EUR') }}</td>
-                    <td class="text-end">{{ account.total | format_currency('EUR') }}</td>
-                    <td class="text-end">
+                    <td class="align-middle">{{ account.name }}</td>
+                    <td class="align-middle">{{ account.owner ? account.owner.fullname : '' }}</td>
+                    <td class="align-middle">{{ account.createdBy.fullname }}</td>
+                    <td class="align-middle text-end">{{ account.totalResources | format_currency('EUR') }}</td>
+                    <td class="align-middle text-end">{{ account.totalCharges | format_currency('EUR') }}</td>
+                    <td class="align-middle text-end">{{ account.total | format_currency('EUR') }}</td>
+                    <td class="align-middle text-end">
 
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
