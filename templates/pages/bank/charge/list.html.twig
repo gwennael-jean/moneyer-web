@@ -18,22 +18,25 @@
                 <th>{% trans %}Charge Name{% endtrans %}</th>
                 <th>{% trans %}Account{% endtrans %}</th>
                 <th class="text-end">{% trans %}Amount{% endtrans %}</th>
+                <th class="text-center">{% trans %}Distribution{% endtrans %}</th>
                 <th class="text-end">{% trans %}Actions{% endtrans %}</th>
             </tr>
             </thead>
             <tbody>
             {% for charge in charges %}
                 <tr>
-                    <td>{{ charge.name }}</td>
-                    <td>
+                    <td class="align-middle">{{ charge.name }}</td>
+                    <td class="align-middle">
                         <div>{{ charge.account.name }}</div>
                         {% if charge.account.owner is not null and charge.account.owner is not same as app.user %}
                             <div class="text-muted">({{ charge.account.owner.fullname }})</div>
                         {% endif %}
                     </td>
-                    <td class="text-end">{{ charge.amount | format_currency('EUR') }}</td>
-                    <td class="text-end">
-
+                    <td class="align-middle text-end">{{ charge.amount | format_currency('EUR') }}</td>
+                    <td class="align-middle text-center">
+                        <i class="fas {{ icon_class(charge.chargeDistribution) }}"></i>
+                    </td>
+                    <td class="align-middle text-end">
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 Action
@@ -50,6 +53,16 @@
                                         </a>
                                     </li>
                                 {% endif %}
+
+                                <li>
+                                    <a href="{{ path('bank_charge_distribution_index', { charge: charge.id }) }}"
+                                       class="dropdown-item"
+                                       data-action="app#openModal"
+                                       data-title="{% trans %}Edit Charge Distribution{% endtrans %}">
+                                        <i class="fas fa-share-alt"></i>
+                                        {% trans %}Edit Charge Distribution{% endtrans %}
+                                    </a>
+                                </li>
 
                                 {% if is_granted('delete', charge) %}
                                 <li>
