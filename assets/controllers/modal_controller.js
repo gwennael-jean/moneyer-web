@@ -2,6 +2,8 @@ import {Controller} from 'stimulus';
 import {Modal} from 'bootstrap';
 
 export default class extends Controller {
+    static targets = ["header", "title", "body", "footer"];
+
     connect() {
         this.modal = new Modal(this.element)
     }
@@ -13,8 +15,9 @@ export default class extends Controller {
         xhr.open("GET", event.target.getAttribute('href'), true)
         xhr.setRequestHeader("X-Requested-With", 'XMLHttpRequest')
 
-        this.element.querySelector('.modal-title').innerHTML = event.target.dataset.title
-        this.element.querySelector('.modal-body').innerHTML = "<div class='text-center'>Loading ...</div>"
+        this.titleTarget.innerHTML = event.target.dataset.title
+        this.bodyTarget.innerHTML = "<div class='text-center'>Loading ...</div>"
+        this.footerTarget.innerHTML = ""
         this.modal.show()
 
         xhr.onreadystatechange = (data) => {
@@ -30,24 +33,24 @@ export default class extends Controller {
         var parser = new DOMParser()
         var response = parser.parseFromString(content, 'text/html')
 
-        this.element.querySelector('.modal-body').innerHTML = response.querySelector('[data-part-body]').innerHTML
-        this.element.querySelector('.modal-footer').innerHTML = response.querySelector('[data-part-footer]').innerHTML
+        this.bodyTarget.innerHTML = response.querySelector('[data-part-body]').innerHTML
+        this.footerTarget.innerHTML = response.querySelector('[data-part-footer]').innerHTML
 
-        if (null !== this.element.querySelector('.modal-body form')) {
+        if (null !== this.bodyTarget.querySelector('form')) {
 
-            if (!this.element.querySelector('.modal-body form').hasAttribute("action")) {
-                this.element.querySelector('.modal-body form').setAttribute("action", element.getAttribute('href'))
+            if (!this.bodyTarget.querySelector('form').hasAttribute("action")) {
+                this.bodyTarget.querySelector('form').setAttribute("action", element.getAttribute('href'))
             }
 
-            if (null !== this.element.querySelector('.modal-footer [type=submit]')) {
-                let formId = this.element.querySelector('.modal-body form').getAttribute('id')
+            if (null !== this.footerTarget.querySelector('[type=submit]')) {
+                let formId = this.bodyTarget.querySelector('form').getAttribute('id')
 
                 if (null === formId) {
                     formId = "form-" + Date.now();
-                    this.element.querySelector('.modal-body form').setAttribute('id', formId)
+                    this.bodyTarget.querySelector('form').setAttribute('id', formId)
                 }
 
-                this.element.querySelector('.modal-footer [type=submit]').setAttribute("form", formId)
+                this.footerTarget.querySelector('[type=submit]').setAttribute("form", formId)
             }
         }
     }
