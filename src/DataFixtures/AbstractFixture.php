@@ -56,10 +56,12 @@ abstract class AbstractFixture extends Fixture implements ContainerAwareInterfac
     {
         $date = new DateTime();
 
-        if (preg_match('/^now:(.*)/', $timestamp, $match)) {
-            $date->modify($match[1]);
-        } else {
-            $date->setTimestamp($timestamp);
+        if ('now' !== $timestamp) {
+            if (preg_match('/^now:(.*)/', $timestamp, $match)) {
+                $date->modify($match[1]);
+            } else {
+                $date->setTimestamp($timestamp);
+            }
         }
 
         return $date;

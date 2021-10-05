@@ -4,8 +4,20 @@ gwennael.jean@mail.test > Compte personnel > Salaire:
   name: Salaire
   account: gwennael.jean@mail.test > Compte personnel
   amount: 2000
+  resources:
+    - { month: now:-2month }
+    - { month: now:-1month }
+    - { month: now }
+    - { month: now:+1month }
+    - { month: now:+2month }
 
 laura.lematelot@mail.test > Compte personnel > Salaire:
   name: Salaire
   account: laura.lematelot@mail.test > Compte personnel
   amount: 1500
+  resources:
+    - { month: now:-2month }
+    - { month: now:-1month }
+    - { month: now }
+    - { month: now:+1month }
+    - { month: now:+2month }
