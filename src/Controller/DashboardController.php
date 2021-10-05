@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\Provider\Bank\AccountProvider;
+use App\Service\RequestHandler;
 use App\Service\Transfer\LivingWageComputer;
 use App\Service\Transfer\TransferComputer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,10 +23,8 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/dashboard', name: 'dashboard')]
-    public function index(): Response
+    public function index(RequestHandler $requestHandler): Response
     {
-        $date = new \DateTime();
-
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -33,10 +33,10 @@ class DashboardController extends AbstractController
 
         $accounts = $this->accountProvider->getByUser($user);
 
-        $transfers = $this->transferComputer->compute($accounts, $date, $user);
+        $transfers = $this->transferComputer->compute($accounts, $requestHandler->getDate(), $user);
 
         return $this->render('pages/dashboard/index.html.twig', [
-            'date' => $date,
+            'date' => $requestHandler->getDate(),
             'accounts' => $accounts,
             'transfers' => $transfers,
             'livingWage' => $this->livingWageComputer->compute($transfers),

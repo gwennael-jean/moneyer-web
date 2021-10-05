@@ -4,6 +4,12 @@
 
 {% block body %}
 
+    <div class="mb-3">
+        {{ sonata_block_render({ type: 'app.block.monthpicker' }, {
+            date: date
+        }) }}
+    </div>
+
     {{ sonata_block_render({ type: 'app.block.searchbar' }, {
         form: formFilter,
         actions: [

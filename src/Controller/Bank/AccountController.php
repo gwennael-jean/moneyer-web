@@ -13,6 +13,7 @@ use App\Notification\Bank\AccountUnshareNotification;
 use App\Notification\UserRecipient;
 use App\Repository\Bank\AccountRepository;
 use App\Security\Voter\Bank\AccountVoter;
+use App\Service\RequestHandler;
 use App\Util\Form\FormFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,10 +30,8 @@ class AccountController extends AbstractController
     }
 
     #[Route('/accounts', name: 'bank_account_list')]
-    public function list(Request $request): Response
+    public function list(Request $request, RequestHandler $requestHandler): Response
     {
-        $date = new \DateTime();
-
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -46,7 +45,7 @@ class AccountController extends AbstractController
         $accounts = $this->accountRepository->findByUser($user, new FormFilter($form));
 
         return $this->render('pages/bank/account/list.html.twig', [
-            'date' => $date,
+            'date' => $requestHandler->getDate(),
             'accounts' => $accounts,
             'formFilter' => $form->createView()
         ]);
