@@ -10,12 +10,12 @@ class AccountBalances
 {
     private WeakMap $map;
 
-    public function __construct(ArrayCollection $accounts)
+    public function __construct(ArrayCollection $accounts, \DateTime $date)
     {
         $this->map = new WeakMap();
 
         foreach ($accounts as $account) {
-            $this->map[$account] = $account->getTotalResources();
+            $this->map[$account] = $account->getTotalResources($date);
         }
     }
 

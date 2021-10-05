@@ -21,7 +21,8 @@ class AccountCardBlock implements BlockServiceInterface
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $content = $this->twig->render($blockContext->getTemplate(), [
-            'account' => $blockContext->getSetting('account')
+            'account' => $blockContext->getSetting('account'),
+            'date' => $blockContext->getSetting('date'),
         ]);
         $response->setContent($content);
         return $response;
@@ -45,6 +46,9 @@ class AccountCardBlock implements BlockServiceInterface
 
         $resolver->setRequired('account');
         $resolver->setAllowedTypes('account', Account::class);
+
+        $resolver->setRequired('date');
+        $resolver->setAllowedTypes('date', \DateTimeInterface::class);
     }
 
 }

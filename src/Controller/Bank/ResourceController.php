@@ -25,6 +25,8 @@ class ResourceController extends AbstractController
     #[Route('/resources', name: 'bank_resource_list')]
     public function list(Request $request): Response
     {
+        $date = new \DateTime();
+
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -37,9 +39,10 @@ class ResourceController extends AbstractController
 
         $form->handleRequest($request);
 
-        $resources = $this->resourceRepository->findByUser($user, new FormFilter($form));
+        $resources = $this->resourceRepository->findByDateAndUser($date, $user, new FormFilter($form));
 
         return $this->render('pages/bank/resource/list.html.twig', [
+            'date' => $date,
             'resources' => $resources,
             'formFilter' => $form->createView(),
         ]);

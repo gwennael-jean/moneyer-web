@@ -14,7 +14,7 @@
             {% trans %}Resources{% endtrans %}
         </div>
         <div class="col-12 col-md-4 text-end">
-            {{ account.totalResources | format_currency('EUR') }}
+            {{ account.totalResources(date) | format_currency('EUR') }}
         </div>
     </div>
     <div class="row">
@@ -22,7 +22,7 @@
             {% trans %}Charges{% endtrans %}
         </div>
         <div class="col-12 col-md-4 text-end">
-            {{ account.totalCharges | format_currency('EUR') }}
+            {{ account.totalCharges(date, app.user) | format_currency('EUR') }}
         </div>
     </div>
 {% endblock %}
@@ -30,6 +30,6 @@
 {% block footer %}
     <div class="d-flex align-items-center">
         <div class="flex-fill">Total</div>
-        <div class="text-end ps-1">{{ account.total(app.user) | format_currency('EUR') }}</div>
+        <div class="text-end ps-1">{{ account.total(date, app.user) | format_currency('EUR') }}</div>
     </div>
 {% endblock %}

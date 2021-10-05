@@ -2,11 +2,13 @@
 
 namespace App\Repository\Bank;
 
+use App\DBAL\Types\MonthType;
 use App\Entity\Bank\Account;
 use App\Entity\Bank\Resource;
 use App\Entity\User;
 use App\Util\Form\FormFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,7 +28,7 @@ class ResourceRepository extends ServiceEntityRepository
     /**
      * @return Resource[] Returns an array of Resource objects
      */
-    public function findByUser(User $user, ?FormFilter $formFilter = null)
+    public function findByDateAndUser(\DateTimeInterface $date, User $user, ?FormFilter $formFilter = null): array
     {
         $queryBuilder = $this->createQueryBuilder('r');
 
@@ -34,7 +36,9 @@ class ResourceRepository extends ServiceEntityRepository
             ->join('r.account', 'a')
             ->leftJoin('a.accountShares', 's')
             ->andWhere('a.createdBy = :user OR a.owner = :user OR s.user = :user')
-            ->setParameter('user', $user);
+            ->andWhere('r.month = :month')
+            ->setParameter('user', $user)
+            ->setParameter('month', $date, MonthType::NAME);
 
         if (null !== $formFilter && $formFilter->hasCriteria()) {
             $queryBuilder->addCriteria($formFilter->getCriteria());
@@ -48,7 +52,7 @@ class ResourceRepository extends ServiceEntityRepository
     /**
      * @return Resource[] Returns an array of Resource objects
      */
-    public function findByOwner(User $user)
+    public function findByOwner(User $user): array
     {
         $queryBuilder = $this->createQueryBuilder('r');
 
@@ -60,15 +64,18 @@ class ResourceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /*
-    public function findOneBySomeField($value): ?Resource
+    public function findByAccountsAndDate(ArrayCollection $accounts, \DateTime $date): array
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
+        $queryBuilder = $this->createQueryBuilder('r');
+
+        return $queryBuilder
+            ->join('r.account', 'a')
+            ->andWhere('a IN (:accounts)')
+            ->andWhere('r.month = :month')
+            ->setParameter('accounts', $accounts)
+            ->setParameter('month', $date, MonthType::NAME)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

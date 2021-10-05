@@ -15,11 +15,11 @@ class TransferCollection implements IteratorAggregate
 
     private Pot $pot;
 
-    public function __construct(ArrayCollection $accounts)
+    public function __construct(ArrayCollection $accounts, \DateTime $date)
     {
         $this->transfers = new ArrayCollection();
         $this->pot = new Pot();
-        $this->accountBalances = new AccountBalances($accounts);
+        $this->accountBalances = new AccountBalances($accounts, $date);
     }
 
     public function add(Transfer $transfer): self

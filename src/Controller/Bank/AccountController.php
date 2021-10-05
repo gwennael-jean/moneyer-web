@@ -31,6 +31,8 @@ class AccountController extends AbstractController
     #[Route('/accounts', name: 'bank_account_list')]
     public function list(Request $request): Response
     {
+        $date = new \DateTime();
+
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -44,6 +46,7 @@ class AccountController extends AbstractController
         $accounts = $this->accountRepository->findByUser($user, new FormFilter($form));
 
         return $this->render('pages/bank/account/list.html.twig', [
+            'date' => $date,
             'accounts' => $accounts,
             'formFilter' => $form->createView()
         ]);

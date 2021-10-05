@@ -23,6 +23,8 @@ class DashboardController extends AbstractController
     #[Route('/dashboard', name: 'dashboard')]
     public function index(): Response
     {
+        $date = new \DateTime();
+
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -31,9 +33,10 @@ class DashboardController extends AbstractController
 
         $accounts = $this->accountProvider->getByUser($user);
 
-        $transfers = $this->transferComputer->compute($accounts, $user);
+        $transfers = $this->transferComputer->compute($accounts, $date, $user);
 
         return $this->render('pages/dashboard/index.html.twig', [
+            'date' => $date,
             'accounts' => $accounts,
             'transfers' => $transfers,
             'livingWage' => $this->livingWageComputer->compute($transfers),

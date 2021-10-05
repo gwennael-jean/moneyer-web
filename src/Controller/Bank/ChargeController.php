@@ -25,6 +25,8 @@ class ChargeController extends AbstractController
     #[Route('/charges', name: 'bank_charge_list')]
     public function list(Request $request): Response
     {
+        $date = new \DateTime();
+
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -37,9 +39,10 @@ class ChargeController extends AbstractController
 
         $form->handleRequest($request);
 
-        $charges = $this->chargeRepository->findByUser($user, new FormFilter($form));
+        $charges = $this->chargeRepository->findByDateAndUser($date, $user, new FormFilter($form));
 
         return $this->render('pages/bank/charge/list.html.twig', [
+            'date' => $date,
             'charges' => $charges,
             'formFilter' => $form->createView()
         ]);

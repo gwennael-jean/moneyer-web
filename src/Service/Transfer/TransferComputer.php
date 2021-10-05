@@ -30,12 +30,13 @@ class TransferComputer
         return $this;
     }
 
-    public function compute(ArrayCollection $accounts, ?User $user = null): TransferCollection
+    public function compute(ArrayCollection $accounts, \DateTime $date, ?User $user = null): TransferCollection
     {
-        $transfers = new TransferCollection($accounts);
+        $transfers = new TransferCollection($accounts, $date);
 
+        /** @var Account $account */
         foreach ($accounts as $account) {
-            foreach ($account->getCharges($user) as $charge) {
+            foreach ($account->getCharges($date, $user) as $charge) {
                 $type = null !== $charge->getChargeDistribution()
                     ? $charge->getChargeDistribution()->getType()
                     : ChargeDistributionType::VIEW;
