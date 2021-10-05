@@ -24,6 +24,12 @@ class Resource
     private $name;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="resources")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $account;
+
+    /**
      * @ORM\Column(type="float")
      */
     private $amount;
@@ -34,10 +40,14 @@ class Resource
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="resources")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=ResourceGroup::class, inversedBy="resources")
      */
-    private $account;
+    private $resourceGroup;
+
+    /**
+     * @ORM\Column(type="MonthType", nullable=true)
+     */
+    private $month;
 
     public function getId(): ?int
     {
@@ -52,6 +62,18 @@ class Resource
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): self
+    {
+        $this->account = $account;
 
         return $this;
     }
@@ -80,14 +102,26 @@ class Resource
         return $this;
     }
 
-    public function getAccount(): ?Account
+    public function getResourceGroup(): ?ResourceGroup
     {
-        return $this->account;
+        return $this->resourceGroup;
     }
 
-    public function setAccount(?Account $account): self
+    public function setResourceGroup(?ResourceGroup $resourceGroup): self
     {
-        $this->account = $account;
+        $this->resourceGroup = $resourceGroup;
+
+        return $this;
+    }
+
+    public function getMonth()
+    {
+        return $this->month;
+    }
+
+    public function setMonth($month): self
+    {
+        $this->month = $month;
 
         return $this;
     }

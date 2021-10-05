@@ -2,14 +2,16 @@
 
 namespace App\Entity\Bank;
 
-use App\Repository\Bank\ChargeRepository;
+use App\Repository\Bank\ChargeGroupRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ChargeRepository::class)
- * @ORM\Table(name="bank_charge")
+ * @ORM\Entity(repositoryClass=ChargeGroupRepository::class)
+ * @ORM\Table(name="bank_charge_group")
  */
-class Charge
+class ChargeGroup
 {
     /**
      * @ORM\Id
@@ -24,7 +26,7 @@ class Charge
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="charges")
+     * @ORM\ManyToOne(targetEntity=Account::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $account;
@@ -35,24 +37,19 @@ class Charge
     private $amount;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $date;
-
-    /**
      * @ORM\OneToOne(targetEntity=ChargeDistribution::class, cascade={"persist", "remove"})
      */
     private $chargeDistribution;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ChargeGroup::class, inversedBy="charges")
+     * @ORM\OneToMany(targetEntity=Charge::class, mappedBy="chargeGroup", cascade={"persist"})
      */
-    private $chargeGroup;
+    private $charges;
 
-    /**
-     * @ORM\Column(type="MonthType", nullable=true)
-     */
-    private $month;
+    public function __construct()
+    {
+        $this->charges = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -95,18 +92,6 @@ class Charge
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
     public function getChargeDistribution(): ?ChargeDistribution
     {
         return $this->chargeDistribution;
@@ -124,32 +109,47 @@ class Charge
         return $this;
     }
 
-    public function getChargeGroup(): ?ChargeGroup
+    /**
+     * @return Collection|Charge[]
+     */
+    public function getCharges(): Collection
     {
-        return $this->chargeGroup;
+        return $this->charges;
     }
 
-    public function setChargeGroup(?ChargeGroup $chargeGroup): self
+    public function addCharge(Charge $charge): self
     {
-        $this->chargeGroup = $chargeGroup;
+        if (!$this->charges->contains($charge)) {
+            $this->charges[] = $charge;
+            $charge
+                ->setChargeGroup($this)
+                ->setAccount($this->getAccount());
+        }
 
         return $this;
     }
 
-    public function getMonth()
+    public function removeCharge(Charge $charge): self
     {
-        return $this->month;
-    }
-
-    public function setMonth($month): self
-    {
-        $this->month = $month;
+        if ($this->charges->removeElement($charge)) {
+            // set the owning side to null (unless already changed)
+            if ($charge->getChargeGroup() === $this) {
+                $charge->setChargeGroup(null);
+            }
+        }
 
         return $this;
     }
 
-    public function __toString(): string
+    public function getStartAt()
     {
-        return sprintf("%s (%s)", $this->getName(), $this->getAmount());
+        return $this->startAt;
+    }
+
+    public function setStartAt($startAt): self
+    {
+        $this->startAt = $startAt;
+
+        return $this;
     }
 }
