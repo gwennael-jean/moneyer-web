@@ -4,13 +4,19 @@
 
 {% block body %}
     <div class="mb-3">
+        {{ sonata_block_render({ type: 'app.block.monthpicker' }, {
+            date: date
+        }) }}
+    </div>
+    <div class="mb-3">
         <div class="row">
             {% for account in accounts %}
                 {% if is_granted('view', account) %}
                     <div class="col-12 col-sm-6 col-lg-4">
                         <div class="mb-3">
                             {{ sonata_block_render({ type: 'app.block.card.account' }, {
-                                account: account
+                                account: account,
+                                date: date
                             }) }}
                         </div>
                     </div>

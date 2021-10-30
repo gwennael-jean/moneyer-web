@@ -2,7 +2,6 @@
 
 namespace App\Service\Block;
 
-use App\Entity\Bank\Account;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\BlockServiceInterface;
 use Sonata\BlockBundle\Model\BlockInterface;
@@ -10,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
-class AccountCardBlock implements BlockServiceInterface
+class MonthPickerBlock implements BlockServiceInterface
 {
     public function __construct(
         private Environment $twig,
@@ -20,9 +19,16 @@ class AccountCardBlock implements BlockServiceInterface
 
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
+        $date = $blockContext->getSetting('date');
+
+        if (!$date instanceof \DateTime) {
+            throw new \InvalidArgumentException(sprintf('date must be instance of %s', \DateTime::class));
+        }
+
         $content = $this->twig->render($blockContext->getTemplate(), [
-            'account' => $blockContext->getSetting('account'),
-            'date' => $blockContext->getSetting('date'),
+            'previous' => (clone $date)->modify('-1 month'),
+            'date' => $date,
+            'next' => (clone $date)->modify('+1 month'),
         ]);
         $response->setContent($content);
         return $response;
@@ -41,14 +47,12 @@ class AccountCardBlock implements BlockServiceInterface
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'template' => 'blocks/cards/card--account.html.twig',
+            'template' => 'blocks/monthpicker.html.twig',
+            'date' => new \DateTime()
         ]);
 
-        $resolver->setRequired('account');
-        $resolver->setAllowedTypes('account', Account::class);
-
         $resolver->setRequired('date');
-        $resolver->setAllowedTypes('date', \DateTimeInterface::class);
+        $resolver->setAllowedTypes('date', \DateTime::class);
     }
 
 }

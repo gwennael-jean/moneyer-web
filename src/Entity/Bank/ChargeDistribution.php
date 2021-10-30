@@ -22,12 +22,6 @@ class ChargeDistribution
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=Charge::class, inversedBy="chargeDistribution", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $charge;
-
-    /**
      * @ORM\Column(type="ChargeDistributionType")
      */
     private $type;
@@ -46,18 +40,6 @@ class ChargeDistribution
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCharge(): ?Charge
-    {
-        return $this->charge;
-    }
-
-    public function setCharge(Charge $charge): self
-    {
-        $this->charge = $charge;
-
-        return $this;
     }
 
     public function getType()

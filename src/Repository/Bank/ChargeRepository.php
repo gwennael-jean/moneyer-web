@@ -2,10 +2,12 @@
 
 namespace App\Repository\Bank;
 
+use App\DBAL\Types\MonthType;
 use App\Entity\Bank\Charge;
 use App\Entity\User;
 use App\Util\Form\FormFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -24,7 +26,7 @@ class ChargeRepository extends ServiceEntityRepository
     /**
      * @return Charge[] Returns an array of Charge objects
      */
-    public function findByUser(User $user, ?FormFilter $formFilter = null)
+    public function findByDateAndUser(\DateTimeInterface $date, User $user, ?FormFilter $formFilter = null)
     {
         $queryBuilder = $this->createQueryBuilder('c');
 
@@ -32,7 +34,9 @@ class ChargeRepository extends ServiceEntityRepository
             ->join('c.account', 'a')
             ->leftJoin('a.accountShares', 's')
             ->andWhere('a.createdBy = :user OR a.owner = :user OR s.user = :user')
-            ->setParameter('user', $user);
+            ->andWhere('c.month = :month')
+            ->setParameter('user', $user)
+            ->setParameter('month', $date, MonthType::NAME);
 
         if (null !== $formFilter && $formFilter->hasCriteria()) {
             $queryBuilder->addCriteria($formFilter->getCriteria());
@@ -43,32 +47,32 @@ class ChargeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // /**
-    //  * @return Charge[] Returns an array of Charge objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findUnexhaustedByAccounts(ArrayCollection $accounts): array
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+        $queryBuilder = $this->createQueryBuilder('c');
+
+        return $queryBuilder
+            ->join('c.account', 'a')
+            ->andWhere('a IN (:accounts)')
+            ->andWhere('c.month IS NULL')
+            ->setParameter('accounts', $accounts)
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Charge
+    public function findByAccountsAndDate(ArrayCollection $accounts, \DateTime $date): array
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
+        $queryBuilder = $this->createQueryBuilder('c');
+
+        return $queryBuilder
+            ->join('c.account', 'a')
+            ->andWhere('a IN (:accounts)')
+            ->andWhere('c.month = :month')
+            ->setParameter('accounts', $accounts)
+            ->setParameter('month', $date, MonthType::NAME)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult()
+            ;
     }
-    */
 }

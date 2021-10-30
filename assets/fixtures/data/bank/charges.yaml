@@ -4,18 +4,62 @@ gwennael.jean@mail.test > Compte personnel > Canal+:
   name: Canal+
   account: gwennael.jean@mail.test > Compte personnel
   amount: 20
+  chargeDistribution:
+    - type: FIFTY_FIFTY
+      users:
+        - gwennael.jean@mail.test
+        - laura.lematelot@mail.test
+  charges:
+    - { month: now:-2month }
+    - { month: now:-1month }
+    - { month: now }
+    - { month: now:+1month }
+    - { month: now:+2month }
 
 gwennael.jean@mail.test > Compte commun > Loyer:
   name: Loyer
   account: gwennael.jean@mail.test > Compte commun
   amount: 750
+  chargeDistribution:
+    - type: FIFTY_FIFTY
+      users:
+        - gwennael.jean@mail.test
+        - laura.lematelot@mail.test
+  charges:
+    - { month: now:-2month }
+    - { month: now:-1month }
+    - { month: now }
+    - { month: now:+1month }
+    - { month: now:+2month }
 
 gwennael.jean@mail.test > Compte commun > Électricité:
   name: Électricité
   account: gwennael.jean@mail.test > Compte commun
   amount: 200
+  chargeDistribution:
+    - type: FIFTY_FIFTY
+      users:
+        - gwennael.jean@mail.test
+        - laura.lematelot@mail.test
+  charges:
+    - { month: now:-2month }
+    - { month: now:-1month }
+    - { month: now }
+    - { month: now:+1month }
+    - { month: now:+2month }
 
 laura.lematelot@mail.test > Compte personnel > Internet:
   name: Internet
   account: laura.lematelot@mail.test > Compte personnel
   amount: 30
+  chargeDistribution:
+    - type: FIFTY_FIFTY
+      users:
+        - gwennael.jean@mail.test
+        - laura.lematelot@mail.test
+  charges:
+    - { month: now:-2month }
+    - { month: now:-1month }
+    - { month: now }
+    - { month: now:+1month }
+    - { month: now:+2month }

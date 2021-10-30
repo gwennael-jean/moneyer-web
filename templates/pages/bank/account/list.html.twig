@@ -4,6 +4,12 @@
 
 {% block body %}
 
+    <div class="mb-3">
+        {{ sonata_block_render({ type: 'app.block.monthpicker' }, {
+            date: date
+        }) }}
+    </div>
+
     {{ sonata_block_render({ type: 'app.block.searchbar' }, {
         form: formFilter,
         actions: [
@@ -30,9 +36,9 @@
                     <td class="align-middle">{{ account.name }}</td>
                     <td class="align-middle">{{ account.owner ? account.owner.fullname : '' }}</td>
                     <td class="align-middle">{{ account.createdBy.fullname }}</td>
-                    <td class="align-middle text-end">{{ account.totalResources | format_currency('EUR') }}</td>
-                    <td class="align-middle text-end">{{ account.totalCharges | format_currency('EUR') }}</td>
-                    <td class="align-middle text-end">{{ account.total | format_currency('EUR') }}</td>
+                    <td class="align-middle text-end">{{ account.totalResources(date) | format_currency('EUR') }}</td>
+                    <td class="align-middle text-end">{{ account.totalCharges(date) | format_currency('EUR') }}</td>
+                    <td class="align-middle text-end">{{ account.total(date) | format_currency('EUR') }}</td>
                     <td class="align-middle text-end">
 
                         <div class="btn-group">

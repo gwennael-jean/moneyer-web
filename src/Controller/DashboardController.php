@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\Provider\Bank\AccountProvider;
+use App\Service\Provider\Bank\AccountProviderInterface;
+use App\Service\RequestHandler;
 use App\Service\Transfer\LivingWageComputer;
 use App\Service\Transfer\TransferComputer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractController
 {
     public function __construct(
-        private AccountProvider $accountProvider,
+        private AccountProviderInterface $accountProvider,
         private TransferComputer $transferComputer,
         private LivingWageComputer $livingWageComputer,
     )
@@ -21,7 +22,7 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/dashboard', name: 'dashboard')]
-    public function index(): Response
+    public function index(RequestHandler $requestHandler): Response
     {
         $user = $this->getUser();
 
@@ -31,9 +32,10 @@ class DashboardController extends AbstractController
 
         $accounts = $this->accountProvider->getByUser($user);
 
-        $transfers = $this->transferComputer->compute($accounts, $user);
+        $transfers = $this->transferComputer->compute($accounts, $requestHandler->getDate(), $user);
 
         return $this->render('pages/dashboard/index.html.twig', [
+            'date' => $requestHandler->getDate(),
             'accounts' => $accounts,
             'transfers' => $transfers,
             'livingWage' => $this->livingWageComputer->compute($transfers),

@@ -2,6 +2,7 @@ doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
         types:
+            MonthType: App\DBAL\Types\MonthType
             AccountShareType: App\DBAL\Types\Bank\AccountShareType
             ChargeDistributionType: App\DBAL\Types\Bank\ChargeDistributionType
 

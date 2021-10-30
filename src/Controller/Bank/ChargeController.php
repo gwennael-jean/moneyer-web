@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\Bank\Charge\ChargeFilterType;
 use App\Form\Bank\Charge\ChargeType;
 use App\Repository\Bank\ChargeRepository;
+use App\Service\RequestHandler;
 use App\Util\Form\FormFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,7 @@ class ChargeController extends AbstractController
     }
 
     #[Route('/charges', name: 'bank_charge_list')]
-    public function list(Request $request): Response
+    public function list(Request $request, RequestHandler $requestHandler): Response
     {
         $user = $this->getUser();
 
@@ -37,9 +38,10 @@ class ChargeController extends AbstractController
 
         $form->handleRequest($request);
 
-        $charges = $this->chargeRepository->findByUser($user, new FormFilter($form));
+        $charges = $this->chargeRepository->findByDateAndUser($requestHandler->getDate(), $user, new FormFilter($form));
 
         return $this->render('pages/bank/charge/list.html.twig', [
+            'date' => $requestHandler->getDate(),
             'charges' => $charges,
             'formFilter' => $form->createView()
         ]);

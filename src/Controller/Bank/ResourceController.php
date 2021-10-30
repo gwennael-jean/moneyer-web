@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\Bank\Resource\ResourceFilterType;
 use App\Form\Bank\Resource\ResourceType;
 use App\Repository\Bank\ResourceRepository;
+use App\Service\RequestHandler;
 use App\Util\Form\FormFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,7 @@ class ResourceController extends AbstractController
     }
 
     #[Route('/resources', name: 'bank_resource_list')]
-    public function list(Request $request): Response
+    public function list(Request $request, RequestHandler $requestHandler): Response
     {
         $user = $this->getUser();
 
@@ -37,9 +38,10 @@ class ResourceController extends AbstractController
 
         $form->handleRequest($request);
 
-        $resources = $this->resourceRepository->findByUser($user, new FormFilter($form));
+        $resources = $this->resourceRepository->findByDateAndUser($requestHandler->getDate(), $user, new FormFilter($form));
 
         return $this->render('pages/bank/resource/list.html.twig', [
+            'date' => $requestHandler->getDate(),
             'resources' => $resources,
             'formFilter' => $form->createView(),
         ]);

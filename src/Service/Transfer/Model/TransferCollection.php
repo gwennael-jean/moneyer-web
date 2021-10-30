@@ -2,6 +2,7 @@
 
 namespace App\Service\Transfer\Model;
 
+use App\Entity\Bank\Account;
 use ArrayIterator;
 use Closure;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,11 +16,17 @@ class TransferCollection implements IteratorAggregate
 
     private Pot $pot;
 
-    public function __construct(ArrayCollection $accounts)
+    private ArrayCollection $resources;
+
+    private ArrayCollection $charges;
+
+    public function __construct(ArrayCollection $accounts, \DateTime $date, ArrayCollection $resources, ArrayCollection $charges)
     {
         $this->transfers = new ArrayCollection();
         $this->pot = new Pot();
-        $this->accountBalances = new AccountBalances($accounts);
+        $this->resources = $resources;
+        $this->charges = $charges;
+        $this->accountBalances = new AccountBalances($accounts, $date, $this->resources);
     }
 
     public function add(Transfer $transfer): self
@@ -50,6 +57,17 @@ class TransferCollection implements IteratorAggregate
     public function filter(Closure $closure): ArrayCollection
     {
         return $this->transfers->filter($closure);
+    }
+
+    public function getDebitedAccount(): ?Account
+    {
+        foreach ($this->getAccountBalances()->map() as $account => $amount) {
+            if ($amount < 0) {
+                return $account;
+            }
+        }
+
+        return null;
     }
 
     public function getIterator()

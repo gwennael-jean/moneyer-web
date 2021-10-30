@@ -107,9 +107,14 @@ class Account
     /**
      * @return Collection|Resource[]
      */
-    public function getResources(): Collection
+    public function getResources(\DateTime $date): Collection
     {
-        return $this->resources;
+        $criteria = Criteria::create();
+
+        $criteria
+            ->andWhere(Criteria::expr()->eq("month", $date));
+
+        return $this->resources->matching($criteria);
     }
 
     public function hasResources(): bool
@@ -142,17 +147,24 @@ class Account
     /**
      * @return Collection|Charge[]
      */
-    public function getCharges(?User $user = null): Collection
+    public function getCharges(\DateTime $date, ?User $user = null): Collection
     {
+        $criteria = Criteria::create();
+
+        $criteria
+            ->andWhere(Criteria::expr()->eq("month", $date));
+
+        $charges = $this->charges->matching($criteria);
+
         if (null !== $user) {
-            return $this->charges->filter(function (Charge $charge) use ($user) {
+            return $charges->filter(function (Charge $charge) use ($user) {
                 return $charge->getAccount()->getCreatedBy() === $user
                     || $charge->getAccount()->getOwner() === $user
                     || (null !== $charge->getChargeDistribution() && $charge->getChargeDistribution()->getUsers()->contains($user));
             });
         }
 
-        return $this->charges;
+        return $charges;
     }
 
     public function hasCharges(): bool
@@ -182,36 +194,31 @@ class Account
         return $this;
     }
 
-    public function getTotalResources(): float
+    public function getTotalResources(\DateTime $date): float
     {
         $total = 0;
 
-        foreach ($this->getResources() as $resource) {
+        foreach ($this->getResources($date) as $resource) {
             $total += $resource->getAmount();
         }
 
         return $total;
     }
 
-    public function getTotalCharges(?User $user = null): float
+    public function getTotalCharges(\DateTime $date, ?User $user = null): float
     {
         $total = 0;
 
-        foreach ($this->getCharges($user) as $charge) {
+        foreach ($this->getCharges($date, $user) as $charge) {
             $total += $charge->getAmount();
         }
 
         return $total;
     }
 
-    public function getTotal(?User $user = null): float
+    public function getTotal(\DateTime $date, ?User $user = null): float
     {
-        return $this->getTotalResources() - $this->getTotalCharges($user);
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
+        return $this->getTotalResources($date) - $this->getTotalCharges($date, $user);
     }
 
     /**
@@ -247,5 +254,10 @@ class Account
     public function getShareUsers(): Collection
     {
         return $this->getAccountShares()->map(fn(AccountShare $accountShare) => $accountShare->getUser());
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }

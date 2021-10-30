@@ -17,6 +17,12 @@ services:
     tags:
       - { name: sonata.block }
 
+  app.block.monthpicker:
+    class: App\Service\Block\MonthPickerBlock
+    arguments: ['@twig']
+    tags:
+      - { name: sonata.block }
+
   app.block.card.account:
     class: App\Service\Block\AccountCardBlock
     arguments: ['@twig']

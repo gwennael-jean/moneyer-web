@@ -50,24 +50,30 @@ class TransferComputerTest extends TestCase
 
     public function testOneTransfer()
     {
+        $today = new \DateTime("2021-01-01");
+
         $user1 = new User();
 
         $user2 = new User();
 
         $resource3000 = (new Bank\Resource())
-            ->setAmount(3000);
+            ->setAmount(3000)
+            ->setMonth($today);
 
         $resource2000 = (new Bank\Resource())
-            ->setAmount(2000);
+            ->setAmount(2000)
+            ->setMonth($today);
 
         $charge100 = (new Bank\Charge())
             ->setAmount(100)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
 
         $charge200 = (new Bank\Charge())
             ->setAmount(200)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
@@ -82,10 +88,12 @@ class TransferComputerTest extends TestCase
             ->addCharge($charge100)
             ->addCharge($charge200);
 
-        $transfers = $this->transferComputer->compute(new ArrayCollection([
+        $accounts = new ArrayCollection([
             $account1,
             $account2
-        ]));
+        ]);
+
+        $transfers = $this->transferComputer->compute($accounts, $today);
 
         $this->assertEquals(2850, $transfers->getAccountBalances()->get($account1));
         $this->assertEquals(1850, $transfers->getAccountBalances()->get($account2));
@@ -103,30 +111,37 @@ class TransferComputerTest extends TestCase
 
     public function testTwoTransfer()
     {
+        $today = new \DateTime("2021-01-01");
+
         $user1 = new User();
 
         $user2 = new User();
 
         $resource3000 = (new Bank\Resource())
-            ->setAmount(3000);
+            ->setAmount(3000)
+            ->setMonth($today);
 
         $resource2000 = (new Bank\Resource())
-            ->setAmount(2000);
+            ->setAmount(2000)
+            ->setMonth($today);
 
         $charge100 = (new Bank\Charge())
             ->setAmount(100)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
 
         $charge200 = (new Bank\Charge())
             ->setAmount(200)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
 
         $charge300 = (new Bank\Charge())
             ->setAmount(300)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
@@ -144,11 +159,13 @@ class TransferComputerTest extends TestCase
             ->addCharge($charge200)
             ->addCharge($charge300);
 
-        $transfers = $this->transferComputer->compute(new ArrayCollection([
+        $accounts = new ArrayCollection([
             $account1,
             $account2,
             $account3
-        ]));
+        ]);
+
+        $transfers = $this->transferComputer->compute($accounts, $today);
 
         $this->assertEquals(2700, $transfers->getAccountBalances()->get($account1));
         $this->assertEquals(1700, $transfers->getAccountBalances()->get($account2));
@@ -176,108 +193,129 @@ class TransferComputerTest extends TestCase
 
     public function testWithAnonymousAccount()
     {
+        $today = new \DateTime("2021-01-01");
+
         $user1 = new User();
 
         $user2 = new User();
 
         $resource2350 = (new Bank\Resource())
-            ->setAmount(2350);
+            ->setAmount(2350)
+            ->setMonth($today);
 
         $resource1150 = (new Bank\Resource())
-            ->setAmount(1150);
+            ->setAmount(1150)
+            ->setMonth($today);
 
         $resource302_77 = (new Bank\Resource())
-            ->setAmount(302.77);
+            ->setAmount(302.77)
+            ->setMonth($today);
 
         $resource443 = (new Bank\Resource())
-            ->setAmount(443);
+            ->setAmount(443)
+            ->setMonth($today);
 
         $charge21_92 = (new Bank\Charge())
             ->setAmount(21.92)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge31_98 = (new Bank\Charge())
             ->setAmount(31.98)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
 
         $charge756_57 = (new Bank\Charge())
             ->setAmount(756.57)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
 
         $charge260_8 = (new Bank\Charge())
             ->setAmount(260.8)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge95_99 = (new Bank\Charge())
             ->setAmount(95.99)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge174 = (new Bank\Charge())
             ->setAmount(174)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge112 = (new Bank\Charge())
             ->setAmount(112)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge13 = (new Bank\Charge())
             ->setAmount(13)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge62_6 = (new Bank\Charge())
             ->setAmount(62.6)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge39_99 = (new Bank\Charge())
             ->setAmount(39.99)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge6_03 = (new Bank\Charge())
             ->setAmount(6.03)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge20 = (new Bank\Charge())
             ->setAmount(20)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge850 = (new Bank\Charge())
             ->setAmount(850)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge100 = (new Bank\Charge())
             ->setAmount(100)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::RESOURCE_PERCENT));
 
         $charge200 = (new Bank\Charge())
             ->setAmount(200)
+            ->setMonth($today)
             ->setChargeDistribution((new Bank\ChargeDistribution())
                 ->setUsers(new ArrayCollection([$user1, $user2]))
                 ->setType(ChargeDistributionType::FIFTY_FIFTY));
@@ -314,7 +352,7 @@ class TransferComputerTest extends TestCase
 
         $accounts = [$account1, $account2, $account3];
 
-        $this->resourceRepositoryMock->method('findByOWner')->willReturnCallback(function ($user) use ($accounts) {
+        $this->resourceRepositoryMock->method('findByOWner')->willReturnCallback(function ($user) use ($accounts, $today) {
             $userAccounts = array_filter($accounts, function (Bank\Account $account) use ($user) {
                 return $account->getOwner() === $user;
             });
@@ -322,7 +360,7 @@ class TransferComputerTest extends TestCase
             $resources = [];
 
             foreach ($userAccounts as $account) {
-                foreach ($account->getResources() as $resource) {
+                foreach ($account->getResources($today) as $resource) {
                     $resources[] = $resource;
                 }
             }
@@ -330,7 +368,7 @@ class TransferComputerTest extends TestCase
             return $resources;
         });
 
-        $transfers = $this->transferComputer->compute(new ArrayCollection($accounts));
+        $transfers = $this->transferComputer->compute(new ArrayCollection($accounts), $today);
 
         $this->assertEquals(883.6, round($transfers->getAccountBalances()->get($account1), 2));
         $this->assertEquals(617.29, round($transfers->getAccountBalances()->get($account2), 2));

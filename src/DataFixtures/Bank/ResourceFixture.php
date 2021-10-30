@@ -4,6 +4,7 @@ namespace App\DataFixtures\Bank;
 
 use App\DataFixtures\AbstractFixture;
 use App\Entity\Bank\Resource;
+use App\Entity\Bank\ResourceGroup;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
@@ -14,14 +15,25 @@ class ResourceFixture extends AbstractFixture implements DependentFixtureInterfa
     public function load(ObjectManager $manager)
     {
         foreach ($this->getData() as $key => $data) {
-            $entity = (new Resource())
+            $resourceGroup = (new ResourceGroup())
                 ->setName($data['name'])
                 ->setAccount($this->getReferenceEntity(AccountFixture::PREFIX_REFERENCE, $data['account']))
                 ->setAmount($data['amount']);
 
-            $this->addReference($this->getReferencePath(self::PREFIX_REFERENCE, $key), $entity);
+            if (isset($data['resources'])) {
+                foreach ($data['resources'] as $resourceData) {
+                    $resource = (new Resource())
+                        ->setName($resourceGroup->getName())
+                        ->setAmount($resourceGroup->getAmount())
+                        ->setMonth($this->getDateTime($resourceData['month']));
 
-            $manager->persist($entity);
+                    $resourceGroup->addResource($resource);
+                }
+            }
+
+            $this->addReference($this->getReferencePath(self::PREFIX_REFERENCE, $key), $resourceGroup);
+
+            $manager->persist($resourceGroup);
         }
 
         $manager->flush();

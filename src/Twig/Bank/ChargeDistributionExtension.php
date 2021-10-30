@@ -4,7 +4,6 @@ namespace App\Twig\Bank;
 
 use App\DBAL\Types\Bank\ChargeDistributionType;
 use App\Entity\Bank\ChargeDistribution;
-use App\Service\Provider\Bank\ResourceProvider;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
