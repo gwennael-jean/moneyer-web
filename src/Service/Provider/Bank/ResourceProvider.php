@@ -8,7 +8,7 @@ use App\Repository\Bank\ResourceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use WeakMap;
 
-class ResourceProvider
+class ResourceProvider implements ResourceProviderInterface
 {
     private WeakMap $resourcesByUser;
 
@@ -36,16 +36,11 @@ class ResourceProvider
      * @param ArrayCollection|Account[] $accounts
      * @return ArrayCollection
      */
-    public function getByAccounts(ArrayCollection $accounts): ArrayCollection
+    public function getByAccountsAndDate(ArrayCollection $accounts, \DateTime $date): ArrayCollection
     {
-        $resources = new ArrayCollection();
-
-        foreach ($accounts as $account) {
-            foreach ($account->getResources() as $resource) {
-                $resources->add($resource);
-            }
-        }
-
-        return $resources;
+        return new ArrayCollection(
+            $this->resourceRepository->findUnexhaustedByAccounts($accounts)
+            + $this->resourceRepository->findByAccountsAndDate($accounts, $date)
+        );
     }
 }

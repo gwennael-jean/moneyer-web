@@ -4,7 +4,7 @@ namespace App\Service\Transfer\TransferChargeDistribution;
 
 use App\DBAL\Types\Bank\ChargeDistributionType;
 use App\Entity\Bank\Charge;
-use App\Service\Provider\Bank\ResourceProvider;
+use App\Service\Provider\Bank\ResourceProviderInterface;
 use App\Service\Transfer\Model\ResourcePercent;
 use App\Service\Transfer\Model\TransferCollection;
 use App\Service\Transfer\TransferChargeDistribution;
@@ -12,7 +12,7 @@ use App\Service\Transfer\TransferChargeDistribution;
 class ResourcePercentTransferChargeDistribution extends TransferChargeDistribution
 {
     public function __construct(
-        private ResourceProvider $resourceProvider
+        private ResourceProviderInterface $resourceProvider
     )
     {
     }

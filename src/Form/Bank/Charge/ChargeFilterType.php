@@ -5,7 +5,7 @@ namespace App\Form\Bank\Charge;
 use App\Entity\Bank\Account;
 use App\Entity\Bank\Charge;
 use App\Entity\User;
-use App\Service\Provider\Bank\AccountProvider;
+use App\Service\Provider\Bank\AccountProviderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ChargeFilterType extends AbstractType
 {
     public function __construct(
-        private AccountProvider $accountProvider
+        private AccountProviderInterface $accountProvider
     )
     {
     }

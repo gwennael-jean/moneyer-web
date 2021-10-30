@@ -47,6 +47,23 @@ class Pot
         return null;
     }
 
+    public function getTotal(): float
+    {
+        $total = 0;
+        foreach ($this->map as $amount) {
+            if ($amount > 0) {
+                $total += $amount;
+            }
+        }
+
+        return $total;
+    }
+
+    public function map(): WeakMap
+    {
+        return $this->map;
+    }
+
     public function get(User $user): ?float
     {
         return isset($this->map[$user]) ? $this->map[$user] : null;

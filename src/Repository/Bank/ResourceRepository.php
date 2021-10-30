@@ -64,6 +64,20 @@ class ResourceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findUnexhaustedByAccounts(ArrayCollection $accounts): array
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+
+        return $queryBuilder
+            ->join('r.account', 'a')
+            ->andWhere('a IN (:accounts)')
+            ->andWhere('r.month IS NULL')
+            ->setParameter('accounts', $accounts)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findByAccountsAndDate(ArrayCollection $accounts, \DateTime $date): array
     {
         $queryBuilder = $this->createQueryBuilder('r');

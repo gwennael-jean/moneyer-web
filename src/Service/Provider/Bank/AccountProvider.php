@@ -7,7 +7,7 @@ use App\Repository\Bank\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use WeakMap;
 
-class AccountProvider
+class AccountProvider implements AccountProviderInterface
 {
     private WeakMap $accountsByUser;
 

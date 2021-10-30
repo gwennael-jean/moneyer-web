@@ -4,7 +4,7 @@ namespace App\Controller\Bank;
 
 use App\Entity\Bank;
 use App\Form\Bank\ChargeDistributionType;
-use App\Service\Provider\Bank\AccountProvider;
+use App\Service\Provider\Bank\AccountProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChargeDistributionController extends AbstractController
 {
     public function __construct(
-        private AccountProvider $accountProvider
+        private AccountProviderInterface $accountProvider
     )
     {
     }
